@@ -2,20 +2,20 @@ package eatpro.model;
 
 public class FoodNutrients {
     protected int foodNutrientId;
-    protected int foodId;
-    protected int nutrientId;
+    protected Food food;
+    protected Nutrients nutrient;
     protected float amount;
 
-    public FoodNutrients(int foodNutrientId, int foodId, int nutrientId, float amount) {
+    public FoodNutrients(int foodNutrientId, Food food, Nutrients nutrient, float amount) {
         this.foodNutrientId = foodNutrientId;
-        this.foodId = foodId;
-        this.nutrientId = nutrientId;
+        this.food = food;
+        this.nutrient = nutrient;
         this.amount = amount;
     }
     
-    public FoodNutrients(int foodId, int nutrientId, float amount) {
-		this.foodId = foodId;
-		this.nutrientId = nutrientId;
+    public FoodNutrients(Food food, Nutrients nutrient, float amount) {
+		this.food = food;
+		this.nutrient = nutrient;
 		this.amount = amount;
 	}
     
@@ -32,20 +32,20 @@ public class FoodNutrients {
         this.foodNutrientId = foodNutrientId;
     }
 
-    public int getFoodId() {
-        return foodId;
+    public Food getFood() {
+        return food;
     }
 
-    public void setFoodId(int foodId) {
-        this.foodId = foodId;
+    public void setFood(Food food) {
+        this.food = food;
     }
 
-    public int getNutrientId() {
-        return nutrientId;
+    public Nutrients getNutrient() {
+        return nutrient;
     }
 
-    public void setNutrientId(int nutrientId) {
-        this.nutrientId = nutrientId;
+    public void setNutrient(Nutrients nutrient) {
+        this.nutrient = nutrient;
     }
 
     public float getAmount() {
