@@ -18,11 +18,15 @@ public class CalculateMealPlans extends HttpServlet {
     
     protected UsersDao usersDao;
     protected MealPlansDao mealPlansDao;
+    protected MealPlanDetailsDao mealPlanDetailsDao;
+    protected MealsDao mealsDao;
 
     @Override
     public void init() throws ServletException {
         usersDao = UsersDao.getInstance();
         mealPlansDao = MealPlansDao.getInstance();
+        mealsDao = MealsDao.getInstance();
+        mealPlanDetailsDao = MealPlanDetailsDao.getInstance();
     }
 
     // MealPlan 
@@ -33,12 +37,12 @@ public class CalculateMealPlans extends HttpServlet {
         req.setAttribute("messages", messages);
 
         String userName = req.getParameter("username");
-        if (userName == null || userName.trim().isEmpty()) {
-            messages.put("title", "Invalid username.");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/foodselection"); // 要改！可能可以发到某个jsp来display error
-            dispatcher.forward(req, resp);
-            return;
-        }
+//        if (userName == null || userName.trim().isEmpty()) {
+//            messages.put("title", "Invalid username.");
+//            RequestDispatcher dispatcher = req.getRequestDispatcher("/foodselection"); // 要改！可能可以发到某个jsp来display error
+//            dispatcher.forward(req, resp);
+//            return;
+//        }
 // create 一个meal plan detail => 
         // 拿回meal plan detail id
         // 建4个meals
@@ -46,23 +50,42 @@ public class CalculateMealPlans extends HttpServlet {
             Users user = usersDao.getUserByUserName(userName);
             if (user == null) {
                 messages.put("title", "User not found: " + userName);
-            } else {
-                int totalDailyCalories = 2000; // This should come from the Daily Calorie Intake Servlet or user adjustments.
-                boolean gainWeight = user.isGainWeight();
-                //distribution公式还要改
-                int breakfastCalories = (int) (totalDailyCalories * 0.25);
-                int lunchCalories = (int) (totalDailyCalories * 0.35);
-                int dinnerCalories = (int) (totalDailyCalories * 0.35);
-                int snackCalories = (int) (totalDailyCalories * 0.05);
-
-                // 在request里改attribute
-                req.setAttribute("breakfastCalories", breakfastCalories);
-                req.setAttribute("lunchCalories", lunchCalories);
-                req.setAttribute("dinnerCalories", dinnerCalories);
-                req.setAttribute("snackCalories", snackCalories);
-
-                messages.put("title", "Meal Plan for " + userName);
             }
+            int mealPlanId = Integer.parseInt(req.getParameter("MealPlanId"));
+            boolean gainWeight = user.isGainWeight();
+         // Create MealPlanDetails
+            MealPlanDetails mealPlanDetails = new MealPlanDetails(mealPlanId);
+            MealPlanDetails createdMealPlanDetails = mealPlanDetailsDao.create(mealPlanDetails);
+
+            // Calculate calorie distribution for each meal
+            int totalDailyCalories = Integer.parseInt(req.getParameter("Calories")); // Example value, adjust as needed => retrieve from parameter
+            double breakfastCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.25);
+            double lunchCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
+            double dinnerCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
+            double snackCalories = gainWeight? (totalDailyCalories * 0.07) : (totalDailyCalories * 0.05);
+            Meals breakfastMeal = new Meals(Meals.MealType.Breakfast, createdMealPlanDetails.getMealPlanDetailId());
+            Meals lunchMeal = new Meals(Meals.MealType.Lunch, createdMealPlanDetails.getMealPlanDetailId());
+            Meals dinnerMeal = new Meals(Meals.MealType.Dinner, createdMealPlanDetails.getMealPlanDetailId());
+            Meals snackMeal = new Meals(Meals.MealType.Snack, createdMealPlanDetails.getMealPlanDetailId());
+            // Create meals for the meal plan
+            mealsDao.create(breakfastMeal);
+            mealsDao.create(lunchMeal);
+            mealsDao.create(dinnerMeal);
+            mealsDao.create(snackMeal);
+            
+            // Forward to FoodSelectionServlet with meal details as attributes
+            req.setAttribute("breakfastMealId", breakfastMeal.getMealId());
+            req.setAttribute("lunchMealId", lunchMeal.getMealId());
+            req.setAttribute("dinnerMealId", dinnerMeal.getMealId());
+            req.setAttribute("snackMealId", snackMeal.getMealId());
+            req.setAttribute("breakfastCalories", breakfastCalories);
+            req.setAttribute("lunchCalories", lunchCalories);
+            req.setAttribute("dinnerCalories", dinnerCalories);
+            req.setAttribute("snackCalories", snackCalories);
+            req.setAttribute("userName", userName); // Pass along the userName if needed
+
+            messages.put("title", "Meal Plan for " + userName);
+           // req.getRequestDispatcher("/foodselection").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
