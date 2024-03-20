@@ -37,7 +37,7 @@ public class MealPlans {
         return user;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(Users user) {
         this.user = user;
     }
 
