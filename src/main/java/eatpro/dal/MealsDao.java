@@ -122,6 +122,45 @@ public class MealsDao {
         }
     }
 
+public List<MealDetails> getMealDetailsByMealsId(int mealsId) throws SQLException {
+    List<MealDetails> mealDetailsList = new ArrayList<>();
+    String selectMealDetails =
+        "SELECT MealDetailId, MealId, FoodId " +
+        "FROM MealDetails " +
+        "WHERE MealId=?;";
+    Connection connection = null;
+    PreparedStatement selectStmt = null;
+    ResultSet results = null;
+    MealsDao mealsDao = MealsDao.getInstance();
+    FoodDao foodDao = FoodDao.getInstance();
+    try {
+        connection = connectionManager.getConnection();
+        selectStmt = connection.prepareStatement(selectMealDetails);
+        selectStmt.setInt(1, mealsId);
+        results = selectStmt.executeQuery();
+        while (results.next()) {
+            int mealDetailId = results.getInt("MealDetailId");
+            int mealId = results.getInt("MealId");
+            int foodId = results.getInt("FoodId");
+
+            Meals meal = mealsDao.getMealById(mealId); // Retrieve the associated Meals instance.
+            Food food = foodDao.getFoodById(foodId); // Retrieve the associated Food instance.
+            MealDetails mealDetail = new MealDetails(mealDetailId, meal, food);
+            mealDetailsList.add(mealDetail);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw e;
+    } finally {
+        if (results != null) results.close();
+        if (selectStmt != null) selectStmt.close();
+        if (connection != null) connection.close();
+    }
+    return mealDetailsList;
+}
+
+
+
     public Meals delete(Meals meal) throws SQLException {
         String deleteMeal = "DELETE FROM Meals WHERE MealId=?;";
         Connection connection = null;
