@@ -4,22 +4,34 @@ import java.sql.Date;
 
 public class UserAdjustments {
     protected int adjustmentId;
-    protected String userName;
+    protected Users user;
     protected Date dateLogged;
     protected Double weight;
     protected Boolean workoutToday;
     protected Integer expectedExerciseCalorie;
     
-    public UserAdjustments(int adjustmentId, String userName, Date dateLogged, Double weight, Boolean workoutToday, Integer expectedExerciseCalorie) {
+    public UserAdjustments(int adjustmentId, Users user, Date dateLogged, Double weight, Boolean workoutToday, Integer expectedExerciseCalorie) {
         this.adjustmentId = adjustmentId;
-        this.userName = userName;
+        this.user = user;
         this.dateLogged = dateLogged;
         this.weight = weight;
         this.workoutToday = workoutToday;
         this.expectedExerciseCalorie = expectedExerciseCalorie;
     }
     
-    public UserAdjustments(int adjustmentId) {
+    
+    public UserAdjustments(Users user, Date dateLogged, Double weight, Boolean workoutToday,
+			Integer expectedExerciseCalorie) {
+		this.user = user;
+		this.dateLogged = dateLogged;
+		this.weight = weight;
+		this.workoutToday = workoutToday;
+		this.expectedExerciseCalorie = expectedExerciseCalorie;
+	}
+
+
+
+	public UserAdjustments(int adjustmentId) {
         this.adjustmentId = adjustmentId;
     }
     
@@ -32,15 +44,15 @@ public class UserAdjustments {
         this.adjustmentId = adjustmentId;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+    public Users getUser() {
+		return user;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	public void setUser(Users user) {
+		this.user = user;
+	}
 
-    public Date getDateLogged() {
+	public Date getDateLogged() {
         return dateLogged;
     }
 

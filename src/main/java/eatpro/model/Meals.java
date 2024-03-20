@@ -3,28 +3,28 @@ package eatpro.model;
 public class Meals {
     protected int mealId;
     protected MealType mealType;
-    protected UserAdjustments userAdjustment;
+    protected Integer mealPlanDetailId;
 
     public enum MealType {
         Breakfast, Lunch, Dinner, Snack
     }
 
-    public Meals(int mealId, MealType mealType, UserAdjustments userAdjustment) {
+    public Meals(int mealId, MealType mealType, Integer mealPlanDetailId) {
         this.mealId = mealId;
         this.mealType = mealType;
-        this.userAdjustment = userAdjustment;
+        this.mealPlanDetailId = mealPlanDetailId;
     }
 
     public Meals(int mealId) {
         this.mealId = mealId;
     }
 
-    public Meals(MealType mealType, UserAdjustments userAdjustment) {
-        this.mealType = mealType;
-        this.userAdjustment = userAdjustment;
-    }
+    public Meals(MealType mealType, Integer mealPlanDetailId) {
+		this.mealType = mealType;
+		this.mealPlanDetailId = mealPlanDetailId;
+	}
 
-    // Getters and Setters
+	// Getters and Setters
     public int getMealId() {
         return mealId;
     }
@@ -41,11 +41,11 @@ public class Meals {
         this.mealType = mealType;
     }
 
-    public UserAdjustments getUserAdjustment() {
-        return userAdjustment;
+    public Integer getMealPlanDetailId() {
+        return mealPlanDetailId;
     }
 
-    public void setUserAdjustment(UserAdjustments userAdjustment) {
-        this.userAdjustment = userAdjustment;
+    public void setMealPlanDetailId(Integer mealPlanDetailId) {
+        this.mealPlanDetailId = mealPlanDetailId;
     }
 }

@@ -48,6 +48,15 @@ public class UserGoals {
 		this.lastUpdated = lastUpdated;
 	}
 	
+	
+	public UserGoals(Users user, GoalType goalType, LocalDate targetDate, double targetValue, Status status) {
+		this.user = user;
+		this.goalType = goalType;
+		this.targetDate = targetDate;
+		this.targetValue = targetValue;
+		this.status = status;
+	}
+
 	public int getGoalId() {
 		return goalId;
 	}

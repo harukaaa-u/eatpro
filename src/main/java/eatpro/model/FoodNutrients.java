@@ -23,7 +23,7 @@ public class FoodNutrients {
 		this.foodNutrientId = foodNutrientId;
 	}
 
-	// Getters and Setters
+	// Getters and Setters d
     public int getFoodNutrientId() {
         return foodNutrientId;
     }
