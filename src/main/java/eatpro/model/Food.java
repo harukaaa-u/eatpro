@@ -10,7 +10,29 @@ public class Food {
     protected String foodName;
 
     public enum MealCategory {
-        Breakfast, Snack, Lunch_Dinner, All
+        Breakfast("breakfast"),
+        Snack("snack"),
+        Lunch_Dinner("lunch/dinner"),
+        All("All");
+
+        private final String value;
+
+        MealCategory(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return this.value;
+        }
+        public static MealCategory fromString(String text) {
+            for (MealCategory b : MealCategory.values()) {
+                if (b.value.equalsIgnoreCase(text)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("No constant with text " + text + " found");
+        }
     }
 
     public Food(int foodId, String ingredients, String servingSize, String servingUnit, String foodCategory, MealCategory mealCategory, String foodName) {

@@ -2,11 +2,11 @@ package eatpro.model;
 
 public class MealPlanDetails {
     protected int mealPlanDetailId;
-    protected Integer mealPlanId;
+    protected MealPlans mealPlan;
 
-    public MealPlanDetails(int mealPlanDetailId, Integer mealPlanId) {
+    public MealPlanDetails(int mealPlanDetailId, MealPlans mealPlan) {
         this.mealPlanDetailId = mealPlanDetailId;
-        this.mealPlanId = mealPlanId;
+        this.mealPlan = mealPlan;
     }
 
     public MealPlanDetails(int mealPlanDetailId) {
@@ -23,11 +23,11 @@ public class MealPlanDetails {
         this.mealPlanDetailId = mealPlanDetailId;
     }
 
-    public Integer getMealPlanId() {
-        return mealPlanId;
+    public MealPlans getMealPlan() {
+        return mealPlan;
     }
 
-    public void setMealPlanId(Integer mealPlanId) {
-        this.mealPlanId = mealPlanId;
+    public void setMealPlan(MealPlans newMealPlan) {
+        this.mealPlan = newMealPlan;
     }
 }

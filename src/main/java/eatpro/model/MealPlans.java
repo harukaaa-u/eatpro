@@ -2,14 +2,14 @@ package eatpro.model;
 
 public class MealPlans {
     protected int mealPlanId;
-    protected String username;
-    protected Integer adjustmentId;
+    protected Users user;
+    protected UserAdjustments userAdjustment;
     protected Integer totalCalorieForToday;
     
-    public MealPlans(int mealPlanId, String username, Integer adjustmentId, Integer totalCalorieForToday) {
+    public MealPlans(int mealPlanId, Users user, UserAdjustments userAdjustment, Integer totalCalorieForToday) {
         this.mealPlanId = mealPlanId;
-        this.username = username;
-        this.adjustmentId = adjustmentId;
+        this.user = user;
+        this.userAdjustment = userAdjustment;
         this.totalCalorieForToday = totalCalorieForToday;
     }
 
@@ -17,9 +17,10 @@ public class MealPlans {
         this.mealPlanId = mealPlanId;
     }
     
-    public MealPlans(String username, Integer adjustmentId, Integer totalCalorieForToday) {
-		this.username = username;
-		this.adjustmentId = adjustmentId;
+
+    public MealPlans(Users user, UserAdjustments userAdjustment, Integer totalCalorieForToday) {
+		this.user = user;
+		this.userAdjustment = userAdjustment;
 		this.totalCalorieForToday = totalCalorieForToday;
 	}
 
@@ -32,20 +33,20 @@ public class MealPlans {
         this.mealPlanId = mealPlanId;
     }
 
-    public String getUsername() {
-        return username;
+    public Users getUser() {
+        return user;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.user = user;
     }
 
-    public Integer getAdjustmentId() {
-        return adjustmentId;
+    public UserAdjustments getAdjustment() {
+        return userAdjustment;
     }
 
-    public void setAdjustmentId(Integer adjustmentId) {
-        this.adjustmentId = adjustmentId;
+    public void setAdjustment(UserAdjustments userAdjustment) {
+        this.userAdjustment = userAdjustment;
     }
 
     public Integer getTotalCalorieForToday() {
