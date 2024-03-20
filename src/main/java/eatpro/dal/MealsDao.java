@@ -1,6 +1,6 @@
 package eatpro.dal;
 
-import eatpro.model.Meals;
+import eatpro.model.*;
 import eatpro.model.Meals.MealType;
 
 import java.sql.Connection;
@@ -32,7 +32,7 @@ public class MealsDao {
             insertStmt = connection.prepareStatement(insertMeal,
                     PreparedStatement.RETURN_GENERATED_KEYS);
             insertStmt.setString(1, meal.getMealType().toString());
-            insertStmt.setInt(2, meal.getMealPlanDetailId());
+            insertStmt.setInt(2, meal.getMealPlanDetail().getMealPlanDetailId());
             insertStmt.executeUpdate();
 
             // Retrieve the auto-generated key and set it to the Meal instance
@@ -66,6 +66,7 @@ public class MealsDao {
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
+        MealPlanDetailsDao mealPlanDetailsDao = MealPlanDetailsDao.getInstance();
         try {
             connection = connectionManager.getConnection();
             selectStmt = connection.prepareStatement(selectMeal);
@@ -75,7 +76,8 @@ public class MealsDao {
                 int resultMealId = results.getInt("MealId");
                 String mealType = results.getString("MealType");
                 int mealPlanDetailId = results.getInt("MealPlanDetailId");
-                Meals meal = new Meals(resultMealId, MealType.valueOf(mealType), mealPlanDetailId);
+                MealPlanDetails mealPlanDetail = mealPlanDetailsDao.getMealPlansDetailsById(mealPlanDetailId);
+                Meals meal = new Meals(resultMealId, MealType.valueOf(mealType), mealPlanDetail);
                 return meal;
             }
         } catch (SQLException e) {
@@ -103,7 +105,7 @@ public class MealsDao {
             connection = connectionManager.getConnection();
             updateStmt = connection.prepareStatement(updateMeal);
             updateStmt.setString(1, meal.getMealType().toString());
-            updateStmt.setInt(2, meal.getMealPlanDetailId());
+            updateStmt.setInt(2, meal.getMealPlanDetail().getMealPlanDetailId());
             updateStmt.setInt(3, meal.getMealId());
             updateStmt.executeUpdate();
 

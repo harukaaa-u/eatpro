@@ -1,6 +1,6 @@
 package eatpro.dal;
 
-import eatpro.model.UserAdjustments;
+import eatpro.model.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +11,7 @@ public class UserAdjustmentsDao {
     protected ConnectionManager connectionManager;
 
     private static UserAdjustmentsDao instance = null;
+
     protected UserAdjustmentsDao() {
         connectionManager = new ConnectionManager();
     }
@@ -30,7 +31,7 @@ public class UserAdjustmentsDao {
             connection = connectionManager.getConnection();
             insertStmt = connection.prepareStatement(insertUserAdjustment, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            insertStmt.setString(1, userAdjustment.getUserName());
+            insertStmt.setString(1, userAdjustment.getUser().getUserName());
             insertStmt.setDate(2, userAdjustment.getDateLogged());
             insertStmt.setDouble(3, userAdjustment.getWeight());
             insertStmt.setBoolean(4, userAdjustment.getWorkoutToday());
@@ -72,17 +73,19 @@ public class UserAdjustmentsDao {
             connection = connectionManager.getConnection();
             selectStmt = connection.prepareStatement(selectUserAdjustment);
             selectStmt.setInt(1, adjustmentId);
+            UsersDao usersDao = UsersDao.getInstance();
 
             results = selectStmt.executeQuery();
             if(results.next()) {
                 int resultAdjustmentId = results.getInt("AdjustmentId");
                 String userName = results.getString("UserName");
+                Users user = usersDao.getUserByUserName(userName);
                 Date dateLogged = results.getDate("DateLogged");
                 Double weight = results.getDouble("Weight");
                 Boolean workoutToday = results.getBoolean("WorkoutToday");
                 Integer expectedExerciseCalorie = results.getInt("ExpectedExerciseCalorie");
 
-                UserAdjustments userAdjustment = new UserAdjustments(resultAdjustmentId, userName, dateLogged, weight, workoutToday, expectedExerciseCalorie);
+                UserAdjustments userAdjustment = new UserAdjustments(resultAdjustmentId, user, dateLogged, weight, workoutToday, expectedExerciseCalorie);
                 return userAdjustment;
             }
         } catch (SQLException e) {

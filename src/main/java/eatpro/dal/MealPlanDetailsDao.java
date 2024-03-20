@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import eatpro.model.Users;
+import eatpro.model.*;
 import eatpro.model.UserAdjustments;
 import eatpro.model.MealPlans;
 import eatpro.model.MealPlanDetails;
@@ -177,7 +177,7 @@ public class MealPlanDetailsDao {
 
             Meals meal = mealsDao.getMealById(mealId); // Retrieve the associated Meals instance.
             Food food = foodDao.getFoodById(foodId); // Retrieve the associated Food instance.
-            MealDetails mealDetail = new MealDetails(mealDetailId, meal, food);
+            MealDetails mealDetail = new MealDetails(mealDetailId, food, meal);
             mealDetailsList.add(mealDetail);
         }
     } catch (SQLException e) {
