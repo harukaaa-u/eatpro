@@ -84,7 +84,7 @@ public class MealDetailsDao {
 
                 Meals meal = mealsDao.getMealById(mealId);
                 Food food = foodDao.getFoodById(foodId);
-                MealDetails mealDetails = new MealDetails(resultMealDetailId, meal, food);
+                MealDetails mealDetails = new MealDetails(resultMealDetailId, food, meal);
                 return mealDetails;
             }
         } catch (SQLException e) {
@@ -109,7 +109,6 @@ public class MealDetailsDao {
             deleteStmt.setInt(1, mealDetails.getMealDetailId());
             deleteStmt.executeUpdate();
 
-            // Return null so the caller can no longer operate on the MealDetails instance.
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
