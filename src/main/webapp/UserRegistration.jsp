@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>User Registration</h2>
-    <%-- Display messages from the servlet --%>
+
     <h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4>
     <form action="userregistration" method="post">
         Username: <input type="text" name="username" required><br>
