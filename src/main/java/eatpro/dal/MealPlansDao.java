@@ -97,7 +97,7 @@ public class MealPlansDao {
         String userName = results.getString("UserName");
         int userAdjustmentsId = results.getInt("AdjustmentsId");
         int totalCalorieForToday = results.getInt("TotalCalorieForToday");
-        Users user = usersDao.getUserFromUserName(userName);
+        Users user = usersDao.getUserByUserName(userName);
         UserAdjustments userAdjustments = userAdjustmentsDao.getUserAdjustmentById(userAdjustmentsId);
         MealPlans mealPlans = new MealPlans(resultMealPlansId, user, userAdjustments, totalCalorieForToday);
         return mealPlans;
@@ -142,7 +142,7 @@ public class MealPlansDao {
         int mealPlansId = results.getInt("MealPlansId");
         int adjustmentId = results.getInt("AdjustmenttId");
         int totalCalorieForToday = results.getInt("TotalCalorieForToday");
-        Users user = usersDao.getUserFromUserName(userName);
+        Users user = usersDao.getUserByUserName(userName);
         UserAdjustments userAdjustments = userAdjustmentsDao.getUserAdjustmentById(adjustmentId);
         MealPlans mealPlan = new MealPlans(mealPlansId, user, userAdjustments, totalCalorieForToday);
         mealPlans.add(mealPlan);
