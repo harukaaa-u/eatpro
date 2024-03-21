@@ -62,7 +62,7 @@ public class DailyCalorieIntake extends HttpServlet {
             // Create a MealPlan object based on the calculated total daily calories
             MealPlans newMealPlan = new MealPlans(user, userAdjustments, totalCalories);
             MealPlans createdMealPlan = mealPlansDao.create(newMealPlan);
-            
+            req.setAttribute("userName", userName);
             req.setAttribute("mealPlan", createdMealPlan);
             req.getRequestDispatcher("/mealplanning").forward(req, resp); 
             

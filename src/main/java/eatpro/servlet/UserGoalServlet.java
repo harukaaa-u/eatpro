@@ -16,7 +16,7 @@ import java.util.Map;
 
 @WebServlet("/usergoal")
 public class UserGoalServlet extends HttpServlet {
-
+	private static final double KG_LBS_CONVERSION = 0.453592;
     protected UserGoalsDao userGoalsDao;
     protected UsersDao usersDao;
 
@@ -75,8 +75,9 @@ public class UserGoalServlet extends HttpServlet {
         try {
             UserGoals.GoalType goalType = UserGoals.GoalType.valueOf(req.getParameter("goaltype").toUpperCase());
             Date targetDate = Date.valueOf(req.getParameter("targetdate"));
-            double targetValue = Double.parseDouble(req.getParameter("targetvalue"));
-            UserGoals.Status status = UserGoals.Status.valueOf(req.getParameter("status").toUpperCase());
+            double targetValue = Double.parseDouble(req.getParameter("targetvalue")) * KG_LBS_CONVERSION;
+            UserGoals.Status status = UserGoals.Status.valueOf("ACTIVE");
+            //UserGoals.Status status = UserGoals.Status.valueOf(req.getParameter("status").toUpperCase());
 
             if ("create".equals(action)) {
                 UserGoals goal = new UserGoals(user, goalType, targetDate, targetValue, status);

@@ -36,7 +36,7 @@ public class CalculateMealPlans extends HttpServlet {
         Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
 
-        String userName = req.getParameter("username");
+        String userName = (String) req.getAttribute("username");
 //        if (userName == null || userName.trim().isEmpty()) {
 //            messages.put("title", "Invalid username.");
 //            RequestDispatcher dispatcher = req.getRequestDispatcher("/foodselection"); // 要改！可能可以发到某个jsp来display error
@@ -49,14 +49,20 @@ public class CalculateMealPlans extends HttpServlet {
             if (user == null) {
                 messages.put("title", "User not found: " + userName);
             }
-            int mealPlanId = Integer.parseInt(req.getParameter("MealPlanId"));
+            
+            MealPlans mealPlan = (MealPlans) req.getAttribute("mealPlan");
+            if (mealPlan == null) {
+            	messages.put("error", "No meal plan found.");
+            	req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+            	return;
+            }
             boolean gainWeight = user.isGainWeight();
          // Create MealPlanDetails
-            MealPlanDetails mealPlanDetails = new MealPlanDetails(mealPlanId);
+            MealPlanDetails mealPlanDetails = new MealPlanDetails(mealPlan.getMealPlanId());
             MealPlanDetails createdMealPlanDetails = mealPlanDetailsDao.create(mealPlanDetails);
 
             // Calculate calorie distribution for each meal
-            int totalDailyCalories = Integer.parseInt(req.getParameter("Calories")); // Example value, adjust as needed => retrieve from parameter
+            int totalDailyCalories = mealPlan.getTotalCalorieForToday(); // Example value, adjust as needed => retrieve from parameter
             double breakfastCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.25);
             double lunchCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double dinnerCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);

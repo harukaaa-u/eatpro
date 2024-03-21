@@ -13,7 +13,7 @@ import java.util.Map;
 
 @WebServlet("/userregistration")
 public class UserRegistrationServlet extends HttpServlet {
-
+	private static final double KG_LBS_CONVERSION = 0.453592;
     protected UsersDao usersDao;
 
     @Override
@@ -38,19 +38,25 @@ public class UserRegistrationServlet extends HttpServlet {
         // Retrieve and validate the input parameters.
         String userName = req.getParameter("username");
         String password = req.getParameter("password");
-        double initialWeight = Double.parseDouble(req.getParameter("initialweight"));
-        double height = Double.parseDouble(req.getParameter("height"));
+        double initialWeight = Double.parseDouble(req.getParameter("initialweight")) * KG_LBS_CONVERSION;
+        int feet = Integer.parseInt(req.getParameter("feet"));
+        int inches = Integer.parseInt(req.getParameter("inches"));
+        double height = (feet * 12) + inches;
+        //double height = Double.parseDouble(req.getParameter("height"));
         boolean gainWeight = Boolean.parseBoolean(req.getParameter("gainweight"));
 
         if (userName == null || userName.trim().isEmpty()) {
-            messages.put("success", "Invalid Username");
+            messages.put("Fail", "Invalid Username");
         } else {
-            // Create the user.
-            Users user = new Users(userName, password, initialWeight, height, gainWeight);
-            try {
-                user = usersDao.create(user);
-                messages.put("success", "Successfully created " + userName);
-            } catch (Exception e) {
+        	 try {
+                 if (usersDao.usernameExists(userName)) {
+                     messages.put("Fail", "Username already taken.");
+                 } else {
+                     Users user = new Users(userName, password, initialWeight, height, gainWeight);
+                     user = usersDao.create(user);
+                     messages.put("success", "Successfully created " + userName);
+                 }
+             }  catch (Exception e) {
                 e.printStackTrace();
                 throw new IOException(e);
             }
