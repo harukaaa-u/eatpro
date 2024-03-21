@@ -86,7 +86,7 @@ public class UserAdjustmentServlet extends HttpServlet {
         req.getSession().setAttribute("userAdjustment", userAdjustment);
         
         // 可以添加一个redirect，Redirect to DailyCalorieIntake servlet，有bug可以删掉
-        resp.sendRedirect("dailyintakecalculation");
+//        resp.sendRedirect("dailyintakecalculation");
         
       } catch (ParseException e) {
         messages.put("success", "Invalid date format. Please use yyyy-MM-dd.");
