@@ -21,7 +21,7 @@
                      <option value="GAINWEIGHT">Gain Weight</option>
                    </select><br>
         Target Weight (lbs): <input type="number" step="0.01" name="targetvalue" required><br>
-        Target Date (YYYY-MM-DD): <input type="date" name="targetdate" required><br>
+        Target Date (yyyy-mm-dd): <input type="date" name="targetdate" required><br>
         <input type="submit" value="Submit Goal">
     </form>
 	

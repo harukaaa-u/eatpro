@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.HashMap" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>User Goals</title>
+    <title>Meal Plan Details</title>
 </head>
 <body>
-<h2>Calorie Distribution for Meal Plan</h2>
+    <h1>Meal Plan for <%= request.getAttribute("userName") %></h1>
+    <h2>Calories Distribution</h2>
     <table border="1">
         <tr>
-            <th>Meal Type</th>
+            <th>Meal</th>
             <th>Calories</th>
         </tr>
         <tr>
@@ -29,6 +31,23 @@
             <td><%= request.getAttribute("snackCalories") %></td>
         </tr>
     </table>
-    <p>User Name: <%= request.getAttribute("userName") %></p>
+
+    <p>Total Daily Calorie Intake: <%= request.getAttribute("totalCalories") %></p>
+    
+    <%
+        HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
+        boolean containsSuccess = false;
+        if (messages != null) {
+            for (String key : messages.keySet()) {
+                out.println("<h4>" + messages.get(key) + "</h4>");
+                if (messages.get(key).contains("Successfully")) {
+                    containsSuccess = true;
+                }
+            }
+        }
+    %>
+    
+    <!-- Optionally, link back to the meal planning or another page -->
+    <a href="mealplanning">Back to Meal Planning</a>
 </body>
 </html>
