@@ -84,7 +84,7 @@ public class UserAdjustmentServlet extends HttpServlet {
         
         // 新修改：Store the UserAdjustments object in session
         req.getSession().setAttribute("userAdjustment", userAdjustment);
-        
+        req.setAttribute("username", username);
         // 可以添加一个redirect，Redirect to DailyCalorieIntake servlet，有bug可以删掉
 //        resp.sendRedirect("dailyintakecalculation");
         

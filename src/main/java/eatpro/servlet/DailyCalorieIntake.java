@@ -37,18 +37,19 @@ public class DailyCalorieIntake extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
-        
+        //String username = (String) req.getAttribute("username");
         // 新修改：Retrieve the UserAdjustments object from session
         UserAdjustments userAdjustments = (UserAdjustments) req.getSession().getAttribute("userAdjustment");
 
         if (userAdjustments == null) {
             messages.put("failure", "User adjustments not found.");
             // 可能需要转发到另一个页面或显示错误消息
-            req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+            //req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
             return;
         }
         
         String userName = req.getParameter("username");
+        System.out.println("Setting userName attribute: " + userName);
         if (userName == null || userName.trim().isEmpty()) {
             messages.put("failure", "Invalid username.");
 //            req.getRequestDispatcher("/index.jsp").forward(req, resp);
@@ -73,24 +74,20 @@ public class DailyCalorieIntake extends HttpServlet {
             MealPlans newMealPlan = new MealPlans(user, userAdjustments, totalCalories);
             MealPlans createdMealPlan = mealPlansDao.create(newMealPlan);
             req.setAttribute("userName", userName);
-            req.setAttribute("mealPlan", createdMealPlan);
-            req.getRequestDispatcher("/mealplanning").forward(req, resp); 
-            
+            req.setAttribute("mealPlan", createdMealPlan);            
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
+        req.getRequestDispatcher("/mealplanning").forward(req, resp); 
     }
 
     private int calculateTotalCalories(Users user, UserAdjustments userAdjustments) throws SQLException {
         // Use a constant to represent the BMR for an average adult.
         double bmrConstant = 10 * user.getInitialWeight() + 6.25 * user.getHeight() - 5;
         double dailyCalorieNeeds = user.isGainWeight() ? bmrConstant * 1.1 : bmrConstant; 
-
-        // Adjust for exercise calories burned
         dailyCalorieNeeds += userAdjustments.getExpectedExerciseCalorie();
         int totalCalories = (int)dailyCalorieNeeds;
-
         return totalCalories;
     }
 }

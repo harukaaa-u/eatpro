@@ -35,14 +35,15 @@ public class CalculateMealPlans extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
-
-        String userName = (String) req.getAttribute("username");
-//        if (userName == null || userName.trim().isEmpty()) {
-//            messages.put("title", "Invalid username.");
-//            RequestDispatcher dispatcher = req.getRequestDispatcher("/foodselection"); // 要改！可能可以发到某个jsp来display error
-//            dispatcher.forward(req, resp);
-//            return;
-//        }
+        System.out.println("Received userName attribute: " + req.getAttribute("userName"));
+        String userName = (String) req.getAttribute("userName");
+        //String userName =req.getParameter("username");
+        if (userName == null || userName.trim().isEmpty()) {
+            messages.put("title", "Invalid username.");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/Test.jsp"); 
+            dispatcher.forward(req, resp);
+            return;
+        }
 
         try {
             Users user = usersDao.getUserByUserName(userName);
