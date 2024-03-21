@@ -104,6 +104,51 @@ public class UserAdjustmentsDao {
         }
         return null;
     }
+    
+    public UserAdjustments getAdjustmentByUserName(String userName) throws SQLException {
+        String selectAdjustment = 
+            "SELECT AdjustmentId, UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie " +
+            "FROM UserAdjustments WHERE UserName=? ORDER BY DateLogged DESC LIMIT 1;";
+        
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectAdjustment);
+            selectStmt.setString(1, userName);
+            
+            results = selectStmt.executeQuery();
+            UsersDao usersDao = UsersDao.getInstance();
+
+            if(results.next()) {
+                int adjustmentId = results.getInt("AdjustmentId");
+                Date dateLogged = results.getDate("DateLogged");
+                Double weight = results.getDouble("Weight");
+                Boolean workoutToday = results.getBoolean("WorkoutToday");
+                Integer expectedExerciseCalorie = results.getInt("ExpectedExerciseCalorie");
+
+                Users user = usersDao.getUserByUserName(userName);
+                UserAdjustments userAdjustment = new UserAdjustments(adjustmentId, user, dateLogged, weight, workoutToday, expectedExerciseCalorie);
+                return userAdjustment;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return null;
+    }
+
 
     public UserAdjustments delete(UserAdjustments userAdjustment) throws SQLException {
         String deleteUserAdjustment = "DELETE FROM UserAdjustments WHERE AdjustmentId=?;";
