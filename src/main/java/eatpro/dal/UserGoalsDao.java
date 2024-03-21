@@ -6,8 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class UserGoalsDao {
   protected ConnectionManager connectionManager;
@@ -88,9 +89,9 @@ public class UserGoalsDao {
     String updateWeight = "UPDATE UserGoals SET Status=? LastUpdated=? WHERE GoalId=?;";
     try (Connection connection = connectionManager.getConnection();
          PreparedStatement updateStmt = connection.prepareStatement(updateWeight)) {
-      updateStmt.setString(1, newStatus);
-      updateStmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      updateStmt.setString(3, userGoalId);
+      updateStmt.setString(1, newStatus.toString());
+      updateStmt.setTimestamp(2, new Timestamp(new Date().getTime()));
+      updateStmt.setInt(3, userGoalId);
       updateStmt.executeUpdate();
 
       return getUserByUserName(userName);
