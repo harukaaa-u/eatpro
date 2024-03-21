@@ -85,17 +85,26 @@ public class CalculateMealPlans extends HttpServlet {
             mealsDao.create(snackMeal);
             
             req.setAttribute("totalCalories", totalDailyCalories);
-            // Forward to FoodSelectionServlet with meal details as attributes
             req.setAttribute("breakfastMealId", breakfastMeal.getMealId());
             req.setAttribute("lunchMealId", lunchMeal.getMealId());
             req.setAttribute("dinnerMealId", dinnerMeal.getMealId());
             req.setAttribute("snackMealId", snackMeal.getMealId());
-            
             req.setAttribute("breakfastCalories", breakfastCalories);
             req.setAttribute("lunchCalories", lunchCalories);
             req.setAttribute("dinnerCalories", dinnerCalories);
             req.setAttribute("snackCalories", snackCalories);
             req.setAttribute("userName", userName);
+            
+            req.getSession().setAttribute("userName", userName);
+            req.getSession().setAttribute("totalCalories", totalDailyCalories);
+            req.getSession().setAttribute("breakfastMealId", breakfastMeal.getMealId());
+            req.getSession().setAttribute("lunchMealId", lunchMeal.getMealId());
+            req.getSession().setAttribute("dinnerMealId", dinnerMeal.getMealId());
+            req.getSession().setAttribute("snackMealId", snackMeal.getMealId());
+            req.getSession().setAttribute("breakfastCalories", breakfastCalories);
+            req.getSession().setAttribute("lunchCalories", lunchCalories);
+            req.getSession().setAttribute("dinnerCalories", dinnerCalories);
+            req.getSession().setAttribute("snackCalories", snackCalories);
 
             messages.put("title", "Meal Plan for " + userName);
            // req.getRequestDispatcher("/foodselection").forward(req, resp);

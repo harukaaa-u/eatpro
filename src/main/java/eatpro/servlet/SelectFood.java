@@ -33,16 +33,28 @@ public class SelectFood extends HttpServlet {
             throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
-		String breakfastId = (String) req.getAttribute("breakfast");
-		String lunchId = (String) req.getAttribute("lunch");
-		String dinnerId = (String) req.getAttribute("dinner");
-		String snackId = (String) req.getAttribute("snack");
-		HashMap<String, Double> breakfastNutrients = (HashMap<String, Double>) req.getAttribute("breakfastNutrients");
-		HashMap<String, Double> lunchNurtients = (HashMap<String, Double>) req.getAttribute("lunchNurtients");
-		HashMap<String, Double> dinnerNutrients = (HashMap<String, Double>) req.getAttribute("dinnerNutrients");
-		HashMap<String, Double> snackNutrients = (HashMap<String, Double>) req.getAttribute("snackNutrients");
+        String userName = (String) req.getSession().getAttribute("userName");
+        Double totalCalories = (Double) req.getSession().getAttribute("totalCalories");
+        Integer breakfastMealId = (Integer) req.getSession().getAttribute("breakfastMealId");
+        Integer lunchMealId = (Integer) req.getSession().getAttribute("lunchMealId");
+        Integer dinnerMealId = (Integer) req.getSession().getAttribute("dinnerMealId");
+        Integer snackMealId = (Integer) req.getSession().getAttribute("snackMealId");
+        Double breakfastCalories = (Double) req.getSession().getAttribute("breakfastCalories");
+        Double lunchCalories = (Double) req.getSession().getAttribute("lunchCalories");
+        Double dinnerCalories = (Double) req.getSession().getAttribute("dinnerCalories");
+        Double snackCalories = (Double) req.getSession().getAttribute("snackCalories");
 
-		selectFood(breakfastId, breakfastNutrients, messages);
+        
+//		String breakfastId = (String) req.getAttribute("breakfast");
+//		String lunchId = (String) req.getAttribute("lunch");
+//		String dinnerId = (String) req.getAttribute("dinner");
+//		String snackId = (String) req.getAttribute("snack");
+//		HashMap<String, Double> breakfastNutrients = (HashMap<String, Double>) req.getAttribute("breakfastNutrients");
+//		HashMap<String, Double> lunchNurtients = (HashMap<String, Double>) req.getAttribute("lunchNurtients");
+//		HashMap<String, Double> dinnerNutrients = (HashMap<String, Double>) req.getAttribute("dinnerNutrients");
+//		HashMap<String, Double> snackNutrients = (HashMap<String, Double>) req.getAttribute("snackNutrients");
+
+			selectFood(breakfastId, breakfastNutrients, messages);
 			selectFood(lunchId, lunchNurtients, messages);
 			selectFood(dinnerId, dinnerNutrients, messages);
 			selectFood(snackId, snackNutrients, messages);
@@ -51,7 +63,7 @@ public class SelectFood extends HttpServlet {
 			req.setAttribute("lunchId", lunchId);
 			req.setAttribute("dinnerId", dinnerId);
 			req.setAttribute("snackId", snackId);
-			req.getRequestDispatcher("/displaymeal").forward(req, resp);
+			req.getRequestDispatcher("/MealPlanDisplay.jsp").forward(req, resp);
 	}
 
 	private void selectFood(String mealId, HashMap<String, Double> nutrients, Map<String, String> messages ) throws IOException {
@@ -59,9 +71,9 @@ public class SelectFood extends HttpServlet {
 					
 			if (mealId != null && !mealId.trim().isEmpty() && nutrients != null) {
 				Meals meal = mealsDao.getMealById(Integer.parseInt(mealId));
-				Food proteinFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "protein", nutrients.get("calories"));
-				Food carbohydrateFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "carbohydrates", nutrients.get("calories"));
-				Food vegetableFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "vegetables", nutrients.get("calories"));
+				Food proteinFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Non-Vegan Proteins", nutrients.get("calories"));
+				Food carbohydrateFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Carbohydrates", nutrients.get("calories"));
+				Food vegetableFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Vegetables", nutrients.get("calories"));
 				MealDetails mealDetails1 = new MealDetails(proteinFood, meal);
 				mealDetailsDao.create(mealDetails1);
 				MealDetails mealDetails2 = new MealDetails(carbohydrateFood, meal);
@@ -78,11 +90,8 @@ public class SelectFood extends HttpServlet {
         }
 		
 	}
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-	}
-
-
-
+//	@Override
+//	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//
+//	}
 }
