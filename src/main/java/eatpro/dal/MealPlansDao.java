@@ -79,9 +79,9 @@ public class MealPlansDao {
    */
   public MealPlans getMealPlansById(int MealPlansId) throws SQLException {
     String selectMealPlans =
-        "SELECT MealPlansId,UserName,AdjustmentId,TotalCalorieForToday " +
+        "SELECT MealPlanId,UserName,AdjustmentId,TotalCalorieForToday " +
             "FROM MealPlans " +
-            "WHERE MealPlansId=?;";
+            "WHERE MealPlanId=?;";
     Connection connection = null;
     PreparedStatement selectStmt = null;
     ResultSet results = null;
@@ -93,9 +93,9 @@ public class MealPlansDao {
       UsersDao usersDao = UsersDao.getInstance();
       UserAdjustmentsDao userAdjustmentsDao = UserAdjustmentsDao.getInstance();
       if(results.next()) {
-        int resultMealPlansId = results.getInt("MealPlansId");
+        int resultMealPlansId = results.getInt("MealPlanId");
         String userName = results.getString("UserName");
-        int userAdjustmentsId = results.getInt("AdjustmentsId");
+        int userAdjustmentsId = results.getInt("AdjustmentId");
         int totalCalorieForToday = results.getInt("TotalCalorieForToday");
         Users user = usersDao.getUserByUserName(userName);
         UserAdjustments userAdjustments = userAdjustmentsDao.getUserAdjustmentById(userAdjustmentsId);
