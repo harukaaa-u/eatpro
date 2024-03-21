@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import eatpro.model.*;
-import eatpro.model.UserAdjustments;
 import eatpro.model.MealPlans;
 import eatpro.model.MealPlanDetails;
 

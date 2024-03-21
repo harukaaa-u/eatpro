@@ -1,6 +1,7 @@
 package eatpro.dal;
 import eatpro.model.*;
 
+
 import eatpro.model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

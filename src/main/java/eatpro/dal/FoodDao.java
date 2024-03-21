@@ -40,8 +40,6 @@ public class FoodDao {
     } catch (SQLException e) {
       e.printStackTrace();
       throw e;
-    } catch (SQLException e1) {
-      throw new RuntimeException(e1);
     }
   }
   public Food getFoodById(int foodId) throws SQLException {
