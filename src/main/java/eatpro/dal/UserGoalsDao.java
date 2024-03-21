@@ -1,6 +1,5 @@
 package eatpro.dal;
 import eatpro.model.*;
-
 import eatpro.model.UserGoals.Status;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -8,8 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 public class UserGoalsDao {
   protected ConnectionManager connectionManager;
@@ -32,11 +30,11 @@ public class UserGoalsDao {
         PreparedStatement insertStmt = connection.prepareStatement(insertUserGoal, PreparedStatement.RETURN_GENERATED_KEYS)) {
       insertStmt.setString(1, userGoal.getUser().getUserName());
       insertStmt.setString(2, userGoal.getGoalType().toString());
-      insertStmt.setDate(3, userGoal.getTargetDate());
+      insertStmt.setDate(3, Date.valueOf(userGoal.getTargetDate()));
       insertStmt.setBigDecimal(4, BigDecimal.valueOf(userGoal.getTargetValue()));
       insertStmt.setString(5, userGoal.getStatus().toString());
-      insertStmt.setDate(6, userGoal.getCreationDate());
-      insertStmt.setDate(7, userGoal.getLastUpdated());
+      insertStmt.setDate(6, Date.valueOf(userGoal.getCreationDate()));
+      insertStmt.setDate(7, Date.valueOf(userGoal.getLastUpdated()));
 
       insertStmt.executeUpdate();
 
@@ -54,27 +52,26 @@ public class UserGoalsDao {
     }
   }
 
-
   public UserGoals getUserGoalById(int goalId) throws SQLException {
     String selectUserGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE GoalId = ?;";
     try (Connection connection = connectionManager.getConnection();
 
         PreparedStatement selectStmt = connection.prepareStatement(selectUserGoal)) {
       selectStmt.setInt(1, goalId);
-      UsersDao usersDao = UsersDao.getInstance();
+      UsersDao nutrientsDao = UsersDao.getInstance();
 
       try (ResultSet results = selectStmt.executeQuery()) {
         if (results.next()) {
           int resultGoalId = results.getInt("GoalId");
           String userName = results.getString("UserName");
           String goalType = results.getString("GoalType");
-          Date targetDate = results.getDate("TargetDate");
+          LocalDate targetDate = results.getDate("TargetDate").toLocalDate();
           double targetValue = results.getBigDecimal("TargetValue").doubleValue();
           String status = results.getString("Status");
-          Date creationDate = results.getDate("CreationDate");
-          Date lastUpdated = results.getDate("LastUpdated");
+          LocalDate creationDate = results.getDate("CreationDate").toLocalDate();
+          LocalDate lastUpdated = results.getDate("LastUpdated").toLocalDate();
 
-          Users user = usersDao.getUserByUserName(userName);
+          Users user = UsersDao.getUserById(userName);
 
           UserGoals goal = new UserGoals(resultGoalId,user, UserGoals.GoalType.valueOf(goalType), targetDate, targetValue, Status.valueOf(status), creationDate, lastUpdated);
           return goal;
@@ -86,77 +83,23 @@ public class UserGoalsDao {
     }
     return null;
   }
-  public List<UserGoals> getGoalsByUserName(String userName) throws SQLException {
-    List<UserGoals> goals = new ArrayList<>();
-    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ?;";
+
+  public UserGoals updateStatus(int userGoalId, Status newStatus) throws SQLException {
+    String updateWeight = "UPDATE UserGoals SET Status=? LastUpdated=? WHERE GoalId=?;";
     try (Connection connection = connectionManager.getConnection();
-        PreparedStatement selectStmt = connection.prepareStatement(selectGoals)) {
-      selectStmt.setString(1, userName);
-      UsersDao usersDao = UsersDao.getInstance();
+         PreparedStatement updateStmt = connection.prepareStatement(updateWeight)) {
+      updateStmt.setString(1, newStatus);
+      updateStmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      updateStmt.setString(3, userGoalId);
+      updateStmt.executeUpdate();
 
-      try (ResultSet results = selectStmt.executeQuery()) {
-        while (results.next()) {
-          int goalId = results.getInt("GoalId");
-          String goalType = results.getString("GoalType");
-          Date targetDate = results.getDate("TargetDate");
-          double targetValue = results.getBigDecimal("TargetValue").doubleValue();
-          Status status = Status.valueOf(results.getString("Status"));
-          Date creationDate = results.getDate("CreationDate");
-          Date lastUpdated = results.getDate("LastUpdated");
-          Users user = usersDao.getUserByUserName(userName);
-
-          UserGoals goal = new UserGoals(goalId, user, UserGoals.GoalType.valueOf(goalType), targetDate, targetValue, status, creationDate, lastUpdated);
-          goals.add(goal);
-        }
-      }
+      return getUserByUserName(userName);
     } catch (SQLException e) {
       e.printStackTrace();
       throw e;
     }
-    return goals;
   }
-  
-  
-  public UserGoals updateGoalById(int goalId, UserGoals userGoal) throws SQLException {
-	    String updateUserGoal = "UPDATE UserGoals SET GoalType = ?, TargetDate = ?, TargetValue = ?, Status = ?, LastUpdated = ? WHERE GoalId = ?;";
-	    try (Connection connection = connectionManager.getConnection();
-	         PreparedStatement updateStmt = connection.prepareStatement(updateUserGoal)) {
-	        
-	        updateStmt.setString(1, userGoal.getGoalType().toString());
-	        updateStmt.setDate(2, userGoal.getTargetDate());
-	        updateStmt.setBigDecimal(3, BigDecimal.valueOf(userGoal.getTargetValue()));
-	        updateStmt.setString(4, userGoal.getStatus().toString());
-	        updateStmt.setDate(5, userGoal.getLastUpdated());
-	        updateStmt.setInt(6, goalId);
 
-	        int affectedRows = updateStmt.executeUpdate();
-	        if (affectedRows == 0) {
-	            throw new SQLException("Updating user goal failed, no rows affected.");
-	        }
-
-	        return getUserGoalById(goalId);
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        throw e;
-	    }
-	}
-
-  
-  public boolean delete(int goalId) throws SQLException {
-	    String deleteUserGoal = "DELETE FROM UserGoals WHERE GoalId = ?;";
-	    try (Connection connection = connectionManager.getConnection();
-	         PreparedStatement deleteStmt = connection.prepareStatement(deleteUserGoal)) {
-	        deleteStmt.setInt(1, goalId);
-
-	        int affectedRows = deleteStmt.executeUpdate();
-	        return affectedRows > 0;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        throw e;
-	    }
-	}
-
-  
   public UserGoals delete(UserGoals userGoal) throws SQLException {
     String deleteUserGoal = "DELETE FROM UserGoals WHERE GoalId = ?;";
     Connection connection = null;
