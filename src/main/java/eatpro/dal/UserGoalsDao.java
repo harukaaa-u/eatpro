@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +32,17 @@ public class UserGoalsDao {
         PreparedStatement insertStmt = connection.prepareStatement(insertUserGoal, PreparedStatement.RETURN_GENERATED_KEYS)) {
       insertStmt.setString(1, userGoal.getUser().getUserName());
       insertStmt.setString(2, userGoal.getGoalType().toString());
-      insertStmt.setDate(3, userGoal.getTargetDate());
+      java.sql.Date sqlTargetDate = new java.sql.Date(userGoal.getTargetDate().getTime());
+      insertStmt.setDate(3, sqlTargetDate);
+      //insertStmt.setDate(3, userGoal.getTargetDate());
       insertStmt.setBigDecimal(4, BigDecimal.valueOf(userGoal.getTargetValue()));
       insertStmt.setString(5, userGoal.getStatus().toString());
-      insertStmt.setDate(6, userGoal.getCreationDate());
-      insertStmt.setDate(7, userGoal.getLastUpdated());
+      java.sql.Date sqlCreationDate = new java.sql.Date(userGoal.getCreationDate().getTime());
+      insertStmt.setDate(6, sqlCreationDate);
+      
+      java.sql.Date sqlLastUpdated = new java.sql.Date(userGoal.getLastUpdated().getTime());
+      insertStmt.setDate(7, sqlLastUpdated);
+      //insertStmt.setDate(7, userGoal.getLastUpdated());
 
       insertStmt.executeUpdate();
 
@@ -123,10 +129,15 @@ public class UserGoalsDao {
 	         PreparedStatement updateStmt = connection.prepareStatement(updateUserGoal)) {
 	        
 	        updateStmt.setString(1, userGoal.getGoalType().toString());
-	        updateStmt.setDate(2, userGoal.getTargetDate());
+	     
+	        java.sql.Date sqlTargetDate = new java.sql.Date(userGoal.getTargetDate().getTime());
+	        updateStmt.setDate(2, sqlTargetDate);
+	        //updateStmt.setDate(2, userGoal.getTargetDate());
 	        updateStmt.setBigDecimal(3, BigDecimal.valueOf(userGoal.getTargetValue()));
 	        updateStmt.setString(4, userGoal.getStatus().toString());
-	        updateStmt.setDate(5, userGoal.getLastUpdated());
+	        java.sql.Date sqlLastUpdated = new java.sql.Date(userGoal.getLastUpdated().getTime());
+	        updateStmt.setDate(5, sqlLastUpdated);
+	        //updateStmt.setDate(5, userGoal.getLastUpdated());
 	        updateStmt.setInt(6, goalId);
 
 	        int affectedRows = updateStmt.executeUpdate();

@@ -40,6 +40,21 @@ public class UsersDao {
         }
     }
     
+    public boolean usernameExists(String userName) throws SQLException {
+        String selectUserName = "SELECT UserName FROM Users WHERE UserName = ?";
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement selectStmt = connection.prepareStatement(selectUserName)) {
+            selectStmt.setString(1, userName);
+            try (ResultSet results = selectStmt.executeQuery()) {
+                if (results.next()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    
     public Users getUserByUserName(String userName) throws SQLException {
         String selectUser = "SELECT UserName, Password, InitialWeight, Height, GainWeight FROM Users WHERE UserName=?;";
         try (Connection connection = connectionManager.getConnection();
