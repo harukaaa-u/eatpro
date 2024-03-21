@@ -28,7 +28,7 @@
         <input id="datelogged" name="datelogged" type="date" value="">
     </p>
     <p>
-        <label for="weight">Weight:</label>
+        <label for="weight">Weight (lbs):</label>
         <input id="weight" name="weight" type="number" step="0.01" value="">
     </p>
     <p>
@@ -68,9 +68,11 @@
 <%
     if (containsSuccess) {
 %>
-	<form action="dailyintakecalculation" method="get">
+
+	<a href="dailyintakecalculation?username=${username}">${username}, View your meal plan!</a>
+	<%-- <form action="dailyintakecalculation?username=<%= request.getAttribute("username") %>" method="get">
         <input type="submit" value="View your meal plan!">
-    </form>
+    </form> --%>
 <%
     }
 %>
