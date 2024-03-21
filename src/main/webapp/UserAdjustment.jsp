@@ -47,11 +47,11 @@
     </p>
 </form>
 <br/><br/>
-<c:if test="${not empty messages.success}">
+<%-- <c:if test="${not empty messages.success}">
     <p>
         <span id="successMessage"><b>${messages.success}</b></span>
     </p>
-</c:if>
+</c:if> --%>
 
 <%
     HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
@@ -68,9 +68,9 @@
 <%
     if (containsSuccess) {
 %>
-<form action="mealplan">
-    <input type="submit" value="Tell Us Your Meal Plan!" />
-</form>
+	<form action="dailyintakecalculation" method="get">
+        <input type="submit" value="View your meal plan!">
+    </form>
 <%
     }
 %>
