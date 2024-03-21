@@ -151,7 +151,25 @@ public class UserGoalsDao {
 	        throw e;
 	    }
 	}
-
+  
+  public UserGoals updateStatus(int userGoalId, Status newStatus) throws SQLException {
+	    String updateWeight = "UPDATE UserGoals SET Status=? LastUpdated=? WHERE GoalId=?;";
+	    try (Connection connection = connectionManager.getConnection();
+	         PreparedStatement updateStmt = connection.prepareStatement(updateWeight)) {
+	      updateStmt.setString(1, newStatus.toString());
+	      UserGoals updatedUserGoals = getUserGoalById(userGoalId);
+	      updatedUserGoals.setLastUpdated();
+	      java.sql.Date sqlLastUpdated = new java.sql.Date(updatedUserGoals.getLastUpdated().getTime());
+	      updateStmt.setDate(2, sqlLastUpdated);
+	      updateStmt.setInt(3, userGoalId);
+	      updateStmt.executeUpdate();
+	      return updatedUserGoals;
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	      throw e;
+	    }
+	  }
+  
   
   public boolean delete(int goalId) throws SQLException {
 	    String deleteUserGoal = "DELETE FROM UserGoals WHERE GoalId = ?;";
