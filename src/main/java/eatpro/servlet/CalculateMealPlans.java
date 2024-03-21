@@ -63,6 +63,7 @@ public class CalculateMealPlans extends HttpServlet {
             double lunchCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double dinnerCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double snackCalories = gainWeight? (totalDailyCalories * 0.07) : (totalDailyCalories * 0.05);
+            
             Meals breakfastMeal = new Meals(Meals.MealType.Breakfast, createdMealPlanDetails.getMealPlanDetailId());
             Meals lunchMeal = new Meals(Meals.MealType.Lunch, createdMealPlanDetails.getMealPlanDetailId());
             Meals dinnerMeal = new Meals(Meals.MealType.Dinner, createdMealPlanDetails.getMealPlanDetailId());
@@ -78,6 +79,7 @@ public class CalculateMealPlans extends HttpServlet {
             req.setAttribute("lunchMealId", lunchMeal.getMealId());
             req.setAttribute("dinnerMealId", dinnerMeal.getMealId());
             req.setAttribute("snackMealId", snackMeal.getMealId());
+            
             req.setAttribute("breakfastCalories", breakfastCalories);
             req.setAttribute("lunchCalories", lunchCalories);
             req.setAttribute("dinnerCalories", dinnerCalories);
@@ -90,7 +92,7 @@ public class CalculateMealPlans extends HttpServlet {
             e.printStackTrace();
             throw new IOException(e);
         }
-
-        req.getRequestDispatcher("/foodselection").forward(req, resp); // 把parameter都计算好的request发到food servlet
+        req.getRequestDispatcher("/Test.jsp").forward(req, resp);
+        //req.getRequestDispatcher("/foodselection").forward(req, resp); // 把attributes都计算好的request发到food servlet
     }
 }
