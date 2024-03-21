@@ -1,12 +1,15 @@
 package eatpro.dal;
 import eatpro.model.*;
+import eatpro.model.Meals.MealType;
 import eatpro.model.Food.MealCategory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class FoodDao {
@@ -37,6 +40,8 @@ public class FoodDao {
     } catch (SQLException e) {
       e.printStackTrace();
       throw e;
+    } catch (SQLException e1) {
+      throw new RuntimeException(e1);
     }
   }
   public Food getFoodById(int foodId) throws SQLException {
@@ -60,7 +65,7 @@ public class FoodDao {
         String mealCategory = results.getString("MealCategory");
         String foodName = results.getString("FoodName");
 
-        MealCategory trueMealCategory = MealCategory.valueOf(mealCategory);
+        MealCategory trueMealCategory = MealCategory.fromString(mealCategory);
         Food food = new Food(resultFoodId, ingredients, servingSize, servingUnit, foodCategory, trueMealCategory, foodName);
         return food;
       }
@@ -111,25 +116,50 @@ public class FoodDao {
       }
     }
   }
-
+  public double getCaloriesForFood(int foodId) throws SQLException {
+    String selectCalories =
+        "SELECT fn.Amount " +
+            "FROM FoodNutrients fn " +
+            "INNER JOIN Nutrients n ON fn.NutrientId = n.NutrientId " +
+            "WHERE fn.FoodId = ? AND n.NutrientName LIKE '%Energy%';";
+    double calories = 0.0;
+    try (Connection connection = connectionManager.getConnection();
+        PreparedStatement selectStmt = connection.prepareStatement(selectCalories)) {
+      selectStmt.setInt(1, foodId);
+      try (ResultSet results = selectStmt.executeQuery()) {
+        if (results.next()) {
+          calories = results.getDouble("Amount");
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw e;
+    }
+    return calories;
+  }
   /**
    * get a random food when required a special meal and food category
-   * @param mealCategory enum, meal category of food
+   * @param mealType enum, meal type of meal
    * @param foodCategory string,food category
    * @return a randome food which satisfied both conditions
    * @throws SQLException
    */
-  public Food getRandomFoodByMealFoodCategory(MealCategory mealCategory, String foodCategory) throws SQLException {
+  public Food getRandomFoodByMealFoodCategory(MealType mealType, String foodCategory, double targetCalories) throws SQLException {
     // SQL to fetch up to 50 food items matching the meal and food category condition at the same time
     String randomFood = "SELECT FoodId, Ingredients, ServingSize, ServingUnit, FoodCategory, MealCategory, FoodName FROM Food WHERE MealCategory = ? AND FoodCategory = ? ORDER BY RAND() LIMIT 50;";
     Connection connection = null;
     PreparedStatement selectStmt = null;
     ResultSet results = null;
     List<Food> foodList = new ArrayList<>();
+    Map<MealType, String> mealTypeToMealCategoryMap = new HashMap<MealType, String>();
+    mealTypeToMealCategoryMap.put(MealType.Breakfast, "breakfast");
+    mealTypeToMealCategoryMap.put(MealType.Snack, "snack");
+    mealTypeToMealCategoryMap.put(MealType.Lunch, "lunch/dinner");
+    mealTypeToMealCategoryMap.put(MealType.Dinner, "lunch/dinner");
     try {
       connection = connectionManager.getConnection();
       selectStmt = connection.prepareStatement(randomFood);
-      selectStmt.setString(1, mealCategory.toString());
+      selectStmt.setString(1, mealTypeToMealCategoryMap.get(mealType));
       selectStmt.setString(2, foodCategory);
 
       results = selectStmt.executeQuery();
@@ -144,9 +174,11 @@ public class FoodDao {
         String fetchedMealCategory = results.getString("MealCategory");
         String foodName = results.getString("FoodName");
 
-        MealCategory trueMealCategory = MealCategory.valueOf(fetchedMealCategory);
+        MealCategory trueMealCategory = MealCategory.fromString(fetchedMealCategory);
         Food food = new Food(foodId, ingredients, servingSize, servingUnit, fetchedFoodCategory, trueMealCategory, foodName);
-        foodList.add(food);
+        if(this.getCaloriesForFood(foodId) <= targetCalories){
+          foodList.add(food);
+        }
       }
 
       // Randomly select one food item from the list, if not empty
@@ -171,4 +203,5 @@ public class FoodDao {
     }
     return null;
   }
+
 }
