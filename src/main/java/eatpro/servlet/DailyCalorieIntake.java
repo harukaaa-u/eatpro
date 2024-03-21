@@ -37,7 +37,17 @@ public class DailyCalorieIntake extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
+        
+        // 新修改：Retrieve the UserAdjustments object from session
+        UserAdjustments userAdjustments = (UserAdjustments) req.getSession().getAttribute("userAdjustment");
 
+        if (userAdjustments == null) {
+            messages.put("failure", "User adjustments not found.");
+            // 可能需要转发到另一个页面或显示错误消息
+            req.getRequestDispatcher("/errorPage.jsp").forward(req, resp);
+            return;
+        }
+        
         String userName = req.getParameter("username");
         if (userName == null || userName.trim().isEmpty()) {
             messages.put("failure", "Invalid username.");
@@ -54,7 +64,7 @@ public class DailyCalorieIntake extends HttpServlet {
             }
             
             // ?? list of UserAdjustments OR UserAdjustments
-            UserAdjustments userAdjustments = userAdjustmentsDao.getAdjustmentByUserName(userName);
+//            UserAdjustments userAdjustments = userAdjustmentsDao.getAdjustmentByUserName(userName);
             
             int totalCalories = calculateTotalCalories(user, userAdjustments);
             messages.put("success", "Total Daily Calorie Intake: " + totalCalories + " calories");

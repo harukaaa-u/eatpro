@@ -64,7 +64,7 @@ public class UserAdjustmentServlet extends HttpServlet {
         // Fetch the user by username.
         Users user = usersDao.getUserByUserName(username);
         if (user == null) {
-          messages.put("success", "User does not exist.");
+          messages.put("failure", "User does not exist.");
           req.getRequestDispatcher("/UserAdjustment.jsp").forward(req, resp);
           return;
         }
@@ -80,6 +80,13 @@ public class UserAdjustmentServlet extends HttpServlet {
         UserAdjustments userAdjustment = new UserAdjustments(user, dateLogged, weight, workoutToday, expectedExerciseCalorie);
         userAdjustment = userAdjustmentsDao.create(userAdjustment);
         messages.put("success", "Successfully created user adjustment for " + username);
+        
+        // 新修改：Store the UserAdjustments object in session
+        req.getSession().setAttribute("userAdjustment", userAdjustment);
+        
+        // 可以添加一个redirect，Redirect to DailyCalorieIntake servlet，有bug可以删掉
+        resp.sendRedirect("dailyintakecalculation");
+        
       } catch (ParseException e) {
         messages.put("success", "Invalid date format. Please use yyyy-MM-dd.");
       } catch (NumberFormatException e) {
