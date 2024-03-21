@@ -25,7 +25,7 @@
         <input type="submit" value="Submit Goal">
     </form>
 	
-	<h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4>
+<%-- 	<h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4> --%>
 	 <%
         HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
         boolean containsSuccess = false;
