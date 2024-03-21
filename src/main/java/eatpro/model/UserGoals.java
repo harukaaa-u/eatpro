@@ -1,6 +1,6 @@
 package eatpro.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class UserGoals {
 	public enum GoalType {
@@ -14,15 +14,15 @@ public class UserGoals {
     protected int goalId;
     protected Users user;
     protected GoalType goalType;
-    protected LocalDate targetDate;
+    protected Date targetDate;
     protected double targetValue;
     protected Status status;
-    protected LocalDate creationDate;
-    protected LocalDate lastUpdated;
+    protected Date creationDate;
+    protected Date lastUpdated;
     
     
-	public UserGoals(Users user, GoalType goalType, LocalDate targetDate, double targetValue, Status status,
-			LocalDate creationDate, LocalDate lastUpdated) {
+	public UserGoals(Users user, GoalType goalType, Date targetDate, double targetValue, Status status,
+			Date creationDate, Date lastUpdated) {
 		this.user = user;
 		this.goalType = goalType;
 		this.targetDate = targetDate;
@@ -36,8 +36,8 @@ public class UserGoals {
 		this.goalId = goalId;
 	}
 
-	public UserGoals(int goalId, Users user, GoalType goalType, LocalDate targetDate, double targetValue,
-			Status status, LocalDate creationDate, LocalDate lastUpdated) {
+	public UserGoals(int goalId, Users user, GoalType goalType, Date targetDate, double targetValue,
+			Status status, Date creationDate, Date lastUpdated) {
 		this.goalId = goalId;
 		this.user = user;
 		this.goalType = goalType;
@@ -49,7 +49,7 @@ public class UserGoals {
 	}
 	
 	
-	public UserGoals(Users user, GoalType goalType, LocalDate targetDate, double targetValue, Status status) {
+	public UserGoals(Users user, GoalType goalType, Date targetDate, double targetValue, Status status) {
 		this.user = user;
 		this.goalType = goalType;
 		this.targetDate = targetDate;
@@ -77,10 +77,10 @@ public class UserGoals {
 	public void setGoalType(GoalType goalType) {
 		this.goalType = goalType;
 	}
-	public LocalDate getTargetDate() {
+	public Date getTargetDate() {
 		return targetDate;
 	}
-	public void setTargetDate(LocalDate targetDate) {
+	public void setTargetDate(Date targetDate) {
 		this.targetDate = targetDate;
 	}
 	public double getTargetValue() {
@@ -95,16 +95,16 @@ public class UserGoals {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-	public LocalDate getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
-	public void setCreationDate(LocalDate creationDate) {
+	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	public LocalDate getLastUpdated() {
+	public Date getLastUpdated() {
 		return lastUpdated;
 	}
-	public void setLastUpdated(LocalDate lastUpdated) {
+	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
     
