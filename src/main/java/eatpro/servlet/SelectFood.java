@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import eatpro.dal.*;
 import eatpro.model.*;
+import eatpro.model.Meals.MealType;
 
 @WebServlet("/foodselection")
 public class SelectFood extends HttpServlet {
@@ -36,10 +37,11 @@ public class SelectFood extends HttpServlet {
         req.setAttribute("messages", messages);
         String userName = (String) req.getSession().getAttribute("userName");
         Integer totalCalories = (Integer) req.getSession().getAttribute("totalCalories");
-        String breakfastMealId = (String) req.getSession().getAttribute("breakfastMealId");
-        String lunchMealId = (String) req.getSession().getAttribute("lunchMealId");
-        String dinnerMealId = (String) req.getSession().getAttribute("dinnerMealId");
-        String snackMealId = (String) req.getSession().getAttribute("snackMealId");
+        // int totalCalories = (int) req.getSession().getAttribute("totalCalories");
+        Integer breakfastMealId = (Integer) req.getSession().getAttribute("breakfastMealId");
+        Integer lunchMealId = (Integer) req.getSession().getAttribute("lunchMealId");
+        Integer dinnerMealId = (Integer) req.getSession().getAttribute("dinnerMealId");
+        Integer snackMealId = (Integer) req.getSession().getAttribute("snackMealId");
         Double breakfastCalories = (Double) req.getSession().getAttribute("breakfastCalories");
         Double lunchCalories = (Double) req.getSession().getAttribute("lunchCalories");
         Double dinnerCalories = (Double) req.getSession().getAttribute("dinnerCalories");
@@ -62,16 +64,26 @@ public class SelectFood extends HttpServlet {
 		req.setAttribute("mealDetailsMap", mealDetailsMap);
 		req.getRequestDispatcher("/MealPlanDisplay.jsp").forward(req, resp);
 	}
- 
-	private List<MealDetails> selectFood(String mealId, double nutrients, Map<String, String> messages ) throws IOException {
+
+
+	private List<MealDetails> selectFood(Integer mealId, double nutrients, Map<String, String> messages) throws IOException {
 		List<MealDetails> mealDetails = new ArrayList<>();
 		try {
 					
-			if (mealId != null && !mealId.trim().isEmpty()) {
-				Meals meal = mealsDao.getMealById(Integer.parseInt(mealId));
-				Food proteinFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "protein", nutrients);
-				Food carbohydrateFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "carbohydrates", nutrients);
-				Food vegetableFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "vegetables", nutrients);
+			Meals meal = mealsDao.getMealById(mealId);
+			
+			if (meal.getMealType().equals(MealType.Snack)) {
+				Food snackFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Healthy Snack", nutrients);
+				System.out.println(snackFood == null ? "snack null" : snackFood.getFoodName());
+				MealDetails mealDetailsSnack = new MealDetails(snackFood, meal);
+				mealDetails.add(mealDetailsSnack);
+			} else {
+				Food proteinFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Non-Vegan Proteins", nutrients * 0.3);
+				Food carbohydrateFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Carbohydrates", nutrients * 0.45);
+				Food vegetableFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Vegetables", nutrients * 0.25);
+				System.out.println(proteinFood == null ? "protein null" : proteinFood.getFoodName());
+				System.out.println(carbohydrateFood == null ? "carbo null" : carbohydrateFood.getFoodName());
+				System.out.println(vegetableFood == null ? "vege null" : vegetableFood.getFoodName());
 				MealDetails mealDetails1 = new MealDetails(proteinFood, meal);
 				mealDetailsDao.create(mealDetails1);
 				MealDetails mealDetails2 = new MealDetails(carbohydrateFood, meal);
@@ -81,9 +93,6 @@ public class SelectFood extends HttpServlet {
 				mealDetails.add(mealDetails1);
 				mealDetails.add(mealDetails2);
 				mealDetails.add(mealDetails3);
-				
-			} else {
-				messages.put("title", "Invalid Meal.");
 			}
 
         } catch (SQLException e) {

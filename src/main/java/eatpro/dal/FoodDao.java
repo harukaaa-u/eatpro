@@ -135,6 +135,7 @@ public class FoodDao {
     }
     return calories;
   }
+  
   /**
    * get a random food when required a special meal and food category
    * @param mealType enum, meal type of meal
@@ -174,7 +175,7 @@ public class FoodDao {
 
         MealCategory trueMealCategory = MealCategory.fromString(fetchedMealCategory);
         Food food = new Food(foodId, ingredients, servingSize, servingUnit, fetchedFoodCategory, trueMealCategory, foodName);
-        if(this.getCaloriesForFood(foodId) <= targetCalories){
+        if(this.getCaloriesForFood(foodId) <= targetCalories + 50 && this.getCaloriesForFood(foodId) >= targetCalories - 50){
           foodList.add(food);
         }
       }

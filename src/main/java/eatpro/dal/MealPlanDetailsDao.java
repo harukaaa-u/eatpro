@@ -77,9 +77,9 @@ public class MealPlanDetailsDao {
    */
   public MealPlanDetails getMealPlansDetailsById(int MealPlanDetailsId) throws SQLException {
     String selectMealPlanDetails =
-        "SELECT MealPlanDetailsId, MealPlanId" +
-            "FROM MealPlanDetails " +
-            "WHERE MealPlanDetailsId=?;";
+        "SELECT MealPlanDetailId,MealPlanId" +
+            " FROM MealPlanDetails " +
+            " WHERE MealPlanDetailId=?;";
     Connection connection = null;
     PreparedStatement selectStmt = null;
     ResultSet results = null;
@@ -90,8 +90,8 @@ public class MealPlanDetailsDao {
       results = selectStmt.executeQuery();
       MealPlansDao mealPlansDao = MealPlansDao.getInstance();
       if(results.next()) {
-        int resultMealPlanDetailsId = results.getInt("MealPlanDetailsId");
-        int mealPlansId = results.getInt("MealPlansId");
+        int resultMealPlanDetailsId = results.getInt("MealPlanDetailId");
+        int mealPlansId = results.getInt("MealPlanId");
         MealPlans mealPlans = mealPlansDao.getMealPlansById(mealPlansId);
         MealPlanDetails mealPlanDetails = new MealPlanDetails(resultMealPlanDetailsId, mealPlans);
         return mealPlanDetails;
