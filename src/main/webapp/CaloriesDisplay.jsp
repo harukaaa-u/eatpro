@@ -48,6 +48,6 @@
     %>
     
     <!-- Optionally, link back to the meal planning or another page -->
-    <a href="mealplanning">Back to Meal Planning</a>
+    <a href="foodselection">${userName}, View your Meal Plans!</a>
 </body>
 </html>

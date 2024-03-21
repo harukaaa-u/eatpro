@@ -69,7 +69,7 @@
     if (containsSuccess) {
 %>
 
-	<a href="dailyintakecalculation?username=${username}">${username}, View your meal plan!</a>
+	<a href="dailyintakecalculation?username=${username}">${username}, View your calories for today!</a>
 	<%-- <form action="dailyintakecalculation?username=<%= request.getAttribute("username") %>" method="get">
         <input type="submit" value="View your meal plan!">
     </form> --%>
