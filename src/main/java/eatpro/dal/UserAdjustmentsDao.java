@@ -1,6 +1,8 @@
 package eatpro.dal;
 
 import eatpro.model.*;
+import eatpro.model.UserGoals.Status;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +24,48 @@ public class UserAdjustmentsDao {
         return instance;
     }
 
+//    public UserAdjustments create(UserAdjustments userAdjustment) throws SQLException {
+//        String insertUserAdjustment = "INSERT INTO UserAdjustments(UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie) VALUES(?,?,?,?,?);";
+//        Connection connection = null;
+//        PreparedStatement insertStmt = null;
+//        ResultSet resultKey = null;
+//        try {
+//            connection = connectionManager.getConnection();
+//            insertStmt = connection.prepareStatement(insertUserAdjustment, PreparedStatement.RETURN_GENERATED_KEYS);
+//
+//            insertStmt.setString(1, userAdjustment.getUser().getUserName());
+//            insertStmt.setDate(2, userAdjustment.getDateLogged());
+//            insertStmt.setDouble(3, userAdjustment.getWeight());
+//            insertStmt.setBoolean(4, userAdjustment.getWorkoutToday());
+//            insertStmt.setInt(5, userAdjustment.getExpectedExerciseCalorie());
+//
+//            insertStmt.executeUpdate();
+//
+//            resultKey = insertStmt.getGeneratedKeys();
+//            int adjustmentId = 0;
+//            if(resultKey.next()) {
+//                adjustmentId = resultKey.getInt(1);
+//            } else {
+//                throw new SQLException("Unable to retrieve auto-generated key.");
+//            }
+//            userAdjustment.setAdjustmentId(adjustmentId);
+//            return userAdjustment;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw e;
+//        } finally {
+//            if(connection != null) {
+//                connection.close();
+//            }
+//            if(insertStmt != null) {
+//                insertStmt.close();
+//            }
+//            if(resultKey != null) {
+//                resultKey.close();
+//            }
+//        }
+//    }
+    
     public UserAdjustments create(UserAdjustments userAdjustment) throws SQLException {
         String insertUserAdjustment = "INSERT INTO UserAdjustments(UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie) VALUES(?,?,?,?,?);";
         Connection connection = null;
@@ -29,6 +73,8 @@ public class UserAdjustmentsDao {
         ResultSet resultKey = null;
         try {
             connection = connectionManager.getConnection();
+            UserGoals usergoal = UserGoalsDao.getInstance().getGoalByUser(userAdjustment.getUser().getUserName());
+
             insertStmt = connection.prepareStatement(insertUserAdjustment, PreparedStatement.RETURN_GENERATED_KEYS);
 
             insertStmt.setString(1, userAdjustment.getUser().getUserName());
@@ -47,6 +93,15 @@ public class UserAdjustmentsDao {
                 throw new SQLException("Unable to retrieve auto-generated key.");
             }
             userAdjustment.setAdjustmentId(adjustmentId);
+            //check if current log reach goal"target goal" --> set finish status
+            if(userAdjustment.getWeight().doubleValue() <= usergoal.getTargetValue() && userAdjustment.getDateLogged().before(usergoal.getTargetDate())){
+                //set status -> finished
+                usergoal = UserGoalsDao.getInstance().updateStatus(usergoal.getGoalId(), Status.ACHIEVED);
+                usergoal = UserGoalsDao.getInstance().updateGoalById(usergoal.getGoalId(), usergoal);
+            }else if(usergoal.getTargetDate().before(userAdjustment.getDateLogged())){
+                usergoal = UserGoalsDao.getInstance().updateStatus(usergoal.getGoalId(), Status.FAILED);
+                usergoal = UserGoalsDao.getInstance().updateGoalById(usergoal.getGoalId(), usergoal);
+            }
             return userAdjustment;
         } catch (SQLException e) {
             e.printStackTrace();

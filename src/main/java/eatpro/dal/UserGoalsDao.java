@@ -92,6 +92,40 @@ public class UserGoalsDao {
     }
     return null;
   }
+  
+  public UserGoals getGoalByUser(String userName) throws SQLException {
+	    UserGoals goal = null;
+	    String selectLatestGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC LIMIT 1;";
+	    
+	    try (Connection connection = connectionManager.getConnection();
+	         PreparedStatement selectStmt = connection.prepareStatement(selectLatestGoal)) {
+	        selectStmt.setString(1, userName);
+
+	        try (ResultSet results = selectStmt.executeQuery()) {
+	            if (results.next()) {
+	                int goalId = results.getInt("GoalId");
+	                String goalTypeStr = results.getString("GoalType");
+	                Date targetDate = results.getDate("TargetDate");
+	                double targetValue = results.getBigDecimal("TargetValue").doubleValue();
+	                UserGoals.Status status = UserGoals.Status.valueOf(results.getString("Status"));
+	                Date creationDate = results.getDate("CreationDate");
+	                Date lastUpdated = results.getDate("LastUpdated");
+	                UserGoals.GoalType goalType = UserGoals.GoalType.valueOf(goalTypeStr);
+	                
+	                UsersDao usersDao = UsersDao.getInstance();
+	                Users user = usersDao.getUserByUserName(userName);
+	                goal = new UserGoals(goalId, user, goalType, targetDate, targetValue, status, creationDate, lastUpdated);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
+	    
+	    return goal;
+	}
+
+  
   public List<UserGoals> getGoalsByUserName(String userName) throws SQLException {
     List<UserGoals> goals = new ArrayList<>();
     String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ?;";
