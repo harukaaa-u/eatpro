@@ -64,7 +64,7 @@ public class DailyCalorieIntake extends HttpServlet {
             MealPlans createdMealPlan = mealPlansDao.create(newMealPlan);
             
             req.setAttribute("mealPlan", createdMealPlan);
-            req.getRequestDispatcher("/mealplanning.jsp").forward(req, resp); 
+            req.getRequestDispatcher("/mealplanning").forward(req, resp); 
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,7 +78,7 @@ public class DailyCalorieIntake extends HttpServlet {
         double dailyCalorieNeeds = user.isGainWeight() ? bmrConstant * 1.1 : bmrConstant; 
 
         // Adjust for exercise calories burned
-        dailyCalorieNeeds -= userAdjustments.getExpectedExerciseCalorie();
+        dailyCalorieNeeds += userAdjustments.getExpectedExerciseCalorie();
         int totalCalories = (int)dailyCalorieNeeds;
 
         return totalCalories;

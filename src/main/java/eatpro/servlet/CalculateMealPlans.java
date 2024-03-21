@@ -43,9 +43,7 @@ public class CalculateMealPlans extends HttpServlet {
 //            dispatcher.forward(req, resp);
 //            return;
 //        }
-// create 一个meal plan detail => 
-        // 拿回meal plan detail id
-        // 建4个meals
+
         try {
             Users user = usersDao.getUserByUserName(userName);
             if (user == null) {
@@ -64,10 +62,10 @@ public class CalculateMealPlans extends HttpServlet {
             double dinnerCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double snackCalories = gainWeight? (totalDailyCalories * 0.07) : (totalDailyCalories * 0.05);
             
-            Meals breakfastMeal = new Meals(Meals.MealType.Breakfast, createdMealPlanDetails.getMealPlanDetailId());
-            Meals lunchMeal = new Meals(Meals.MealType.Lunch, createdMealPlanDetails.getMealPlanDetailId());
-            Meals dinnerMeal = new Meals(Meals.MealType.Dinner, createdMealPlanDetails.getMealPlanDetailId());
-            Meals snackMeal = new Meals(Meals.MealType.Snack, createdMealPlanDetails.getMealPlanDetailId());
+            Meals breakfastMeal = new Meals(Meals.MealType.Breakfast, createdMealPlanDetails);
+            Meals lunchMeal = new Meals(Meals.MealType.Lunch, createdMealPlanDetails);
+            Meals dinnerMeal = new Meals(Meals.MealType.Dinner, createdMealPlanDetails);
+            Meals snackMeal = new Meals(Meals.MealType.Snack, createdMealPlanDetails);
             // Create meals for the meal plan
             mealsDao.create(breakfastMeal);
             mealsDao.create(lunchMeal);
