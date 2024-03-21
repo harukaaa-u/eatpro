@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +24,30 @@
         Target Date (YYYY-MM-DD): <input type="date" name="targetdate" required><br>
         <input type="submit" value="Submit Goal">
     </form>
+	
 	<h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4>
+	 <%
+        HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
+        boolean containsSuccess = false;
+        if (messages != null) {
+            for (String key : messages.keySet()) {
+                out.println("<h4>" + messages.get(key) + "</h4>");
+                if (messages.get(key).contains("Successfully")) {
+                    containsSuccess = true;
+                }
+            }
+        }
+    %>
+   <% 
+    if (containsSuccess) {
+ %>
+    <form action="useradjustment">
+        <input type="submit" value="Check in your progress today!" />
+    </form>
+ <% 
+    } 
+ %>
+	
    <%--  <h3>Existing Goals</h3>
     <table border="1">
         <tr>

@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.HashMap" %>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -51,5 +52,27 @@
         <span id="successMessage"><b>${messages.success}</b></span>
     </p>
 </c:if>
+
+<%
+    HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
+    boolean containsSuccess = false;
+    if (messages != null) {
+        for (String key : messages.keySet()) {
+            out.println("<h4>" + messages.get(key) + "</h4>");
+            if (messages.get(key).contains("Successfully")) {
+                containsSuccess = true;
+            }
+        }
+    }
+%>
+<%
+    if (containsSuccess) {
+%>
+<form action="mealplan">
+    <input type="submit" value="Tell Us Your Meal Plan!" />
+</form>
+<%
+    }
+%>
 </body>
 </html>
