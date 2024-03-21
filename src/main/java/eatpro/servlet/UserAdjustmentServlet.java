@@ -27,6 +27,7 @@ public class UserAdjustmentServlet extends HttpServlet {
   @Override
   public void init() throws ServletException {
     userAdjustmentsDao = UserAdjustmentsDao.getInstance();
+    usersDao = UsersDao.getInstance();
   }
 
   @Override
