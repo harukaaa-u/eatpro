@@ -23,7 +23,7 @@
         Target Date (YYYY-MM-DD): <input type="date" name="targetdate" required><br>
         <input type="submit" value="Submit Goal">
     </form>
-
+	<h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4>
    <%--  <h3>Existing Goals</h3>
     <table border="1">
         <tr>
