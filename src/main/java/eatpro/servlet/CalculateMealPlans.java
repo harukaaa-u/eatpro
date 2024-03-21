@@ -59,15 +59,20 @@ public class CalculateMealPlans extends HttpServlet {
             }
             boolean gainWeight = user.isGainWeight();
          // Create MealPlanDetails
-            MealPlanDetails mealPlanDetails = new MealPlanDetails(mealPlan.getMealPlanId());
+            MealPlanDetails mealPlanDetails = new MealPlanDetails(mealPlan);
             MealPlanDetails createdMealPlanDetails = mealPlanDetailsDao.create(mealPlanDetails);
 
             // Calculate calorie distribution for each meal
-            int totalDailyCalories = mealPlan.getTotalCalorieForToday(); // Example value, adjust as needed => retrieve from parameter
+            int totalDailyCalories = mealPlan.getTotalCalorieForToday();
+            System.out.println(totalDailyCalories + "Calories for Today");
             double breakfastCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.25);
             double lunchCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double dinnerCalories = gainWeight? (totalDailyCalories * 0.31) : (totalDailyCalories * 0.35);
             double snackCalories = gainWeight? (totalDailyCalories * 0.07) : (totalDailyCalories * 0.05);
+            breakfastCalories = Math.round(breakfastCalories * 100.0) / 100.0;
+            lunchCalories = Math.round(lunchCalories * 100.0) / 100.0;
+            dinnerCalories = Math.round(dinnerCalories * 100.0) / 100.0;
+            snackCalories = Math.round(snackCalories * 100.0) / 100.0;
             
             Meals breakfastMeal = new Meals(Meals.MealType.Breakfast, createdMealPlanDetails);
             Meals lunchMeal = new Meals(Meals.MealType.Lunch, createdMealPlanDetails);
@@ -79,6 +84,7 @@ public class CalculateMealPlans extends HttpServlet {
             mealsDao.create(dinnerMeal);
             mealsDao.create(snackMeal);
             
+            req.setAttribute("totalCalories", totalDailyCalories);
             // Forward to FoodSelectionServlet with meal details as attributes
             req.setAttribute("breakfastMealId", breakfastMeal.getMealId());
             req.setAttribute("lunchMealId", lunchMeal.getMealId());

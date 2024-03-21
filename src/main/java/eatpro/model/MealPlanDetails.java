@@ -13,8 +13,11 @@ public class MealPlanDetails {
         this.mealPlanDetailId = mealPlanDetailId;
     }
     
+    public MealPlanDetails(MealPlans mealPlan) {
+		this.mealPlan = mealPlan;
+	}
 
-    // Getters and Setters
+	// Getters and Setters
     public int getMealPlanDetailId() {
         return mealPlanDetailId;
     }

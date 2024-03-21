@@ -32,7 +32,7 @@
         </tr>
     </table>
 
-    <p>Total Daily Calorie Intake: <%= request.getAttribute("totalCalories") %></p>
+    <p>Total Daily Calorie Intake For Today: <%= request.getAttribute("totalCalories") %></p>
     
     <%
         HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
