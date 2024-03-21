@@ -95,7 +95,7 @@ public class CalculateMealPlans extends HttpServlet {
             req.setAttribute("lunchCalories", lunchCalories);
             req.setAttribute("dinnerCalories", dinnerCalories);
             req.setAttribute("snackCalories", snackCalories);
-            req.setAttribute("userName", userName); // Pass along the userName if needed
+            req.setAttribute("userName", userName);
 
             messages.put("title", "Meal Plan for " + userName);
            // req.getRequestDispatcher("/foodselection").forward(req, resp);
@@ -103,7 +103,7 @@ public class CalculateMealPlans extends HttpServlet {
             e.printStackTrace();
             throw new IOException(e);
         }
-        req.getRequestDispatcher("/Test.jsp").forward(req, resp);
+        req.getRequestDispatcher("/CaloriesDisplay.jsp").forward(req, resp);
         //req.getRequestDispatcher("/foodselection").forward(req, resp); // 把attributes都计算好的request发到food servlet
     }
 }
