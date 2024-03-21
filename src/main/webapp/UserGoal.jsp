@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,18 +9,18 @@
 <body>
     <h2>User Goals</h2>
     <%-- Display messages from the servlet --%>
-    <h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4>
+   <%--  <h4><%= request.getAttribute("messages") != null ? request.getAttribute("messages") : "" %></h4> --%>
 
     <h3>Create New Goal</h3>
     <form action="usergoal" method="post">
         <input type="hidden" name="action" value="create">
         Username: <input type="text" name="username" required><br>
         Goal Type: <select name="goaltype">
-                     <option value="Weight Loss">Weight Loss</option>
-                     <option value="Gain Weight">Gain Weight</option>
+                     <option value="WEIGHTLOSS">Weight Loss</option>
+                     <option value="GAINWEIGHT">Gain Weight</option>
                    </select><br>
-        Target Weight: <input type="number" step="0.01" name="targetvalue" required><br>
-        Target Date: <input type="date" name="targetdate" required><br>
+        Target Weight (lbs): <input type="number" step="0.01" name="targetvalue" required><br>
+        Target Date (YYYY-MM-DD): <input type="date" name="targetdate" required><br>
         <input type="submit" value="Submit Goal">
     </form>
 
