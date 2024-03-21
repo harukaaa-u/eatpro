@@ -35,7 +35,7 @@ public class SelectFood extends HttpServlet {
 		Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
         String userName = (String) req.getSession().getAttribute("userName");
-        Double totalCalories = (Double) req.getSession().getAttribute("totalCalories");
+        Integer totalCalories = (Integer) req.getSession().getAttribute("totalCalories");
         String breakfastMealId = (String) req.getSession().getAttribute("breakfastMealId");
         String lunchMealId = (String) req.getSession().getAttribute("lunchMealId");
         String dinnerMealId = (String) req.getSession().getAttribute("dinnerMealId");
@@ -62,7 +62,7 @@ public class SelectFood extends HttpServlet {
 		req.setAttribute("mealDetailsMap", mealDetailsMap);
 		req.getRequestDispatcher("/MealPlanDisplay.jsp").forward(req, resp);
 	}
-
+ 
 	private List<MealDetails> selectFood(String mealId, double nutrients, Map<String, String> messages ) throws IOException {
 		List<MealDetails> mealDetails = new ArrayList<>();
 		try {
