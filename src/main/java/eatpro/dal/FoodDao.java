@@ -151,7 +151,7 @@ public class FoodDao {
     ResultSet results = null;
     List<Food> foodList = new ArrayList<>();
     Map<MealType, String> mealTypeToMealCategoryMap = new HashMap<MealType, String>();
-    mealTypeToMealCategoryMap.put(MealType.Breakfast, "breakfast");
+    mealTypeToMealCategoryMap.put(MealType.Breakfast, "lunch/dinner");
     mealTypeToMealCategoryMap.put(MealType.Snack, "snack");
     mealTypeToMealCategoryMap.put(MealType.Lunch, "lunch/dinner");
     mealTypeToMealCategoryMap.put(MealType.Dinner, "lunch/dinner");
