@@ -1,7 +1,6 @@
 package eatpro.servlet;
 
 import eatpro.dal.UsersDao;
-import eatpro.model.UserGoals;
 import eatpro.model.Users;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @WebServlet("/userlogin")
@@ -61,7 +59,6 @@ public class UserLoginServlet extends HttpServlet {
             req.setAttribute("error", "Database error occurred. Please try again.");
         }
 
-        // Forward back to the login page with error message
         req.getRequestDispatcher("/loginPage.jsp").forward(req, resp);
     }
 }

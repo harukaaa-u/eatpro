@@ -27,13 +27,11 @@ public class UserRegistrationServlet extends HttpServlet {
         // Just forward to the registration JSP.
         req.getRequestDispatcher("/UserRegistration.jsp").forward(req, resp);
     }
-
+    
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Map for storing messages.
         Map<String, String> messages = new HashMap<>();
-        req.setAttribute("messages", messages);
 
         // Retrieve and validate the input parameters.
         String userName = req.getParameter("username");
@@ -42,26 +40,68 @@ public class UserRegistrationServlet extends HttpServlet {
         int feet = Integer.parseInt(req.getParameter("feet"));
         int inches = Integer.parseInt(req.getParameter("inches"));
         double height = (feet * 12) + inches;
-        //double height = Double.parseDouble(req.getParameter("height"));
         boolean gainWeight = Boolean.parseBoolean(req.getParameter("gainweight"));
 
         if (userName == null || userName.trim().isEmpty()) {
             messages.put("Fail", "Invalid Username");
+            req.setAttribute("messages", messages);
+            req.getRequestDispatcher("/UserRegistration.jsp").forward(req, resp);
         } else {
-        	 try {
-                 if (usersDao.usernameExists(userName)) {
-                     messages.put("Fail", "Username already taken.");
-                 } else {
-                     Users user = new Users(userName, password, initialWeight, height, gainWeight);
-                     user = usersDao.create(user);
-                     messages.put("success", "Successfully created " + userName);
-                 }
-             }  catch (Exception e) {
+            try {
+                if (usersDao.usernameExists(userName)) {
+                    messages.put("Fail", "Username already exists.");
+                    req.setAttribute("messages", messages);
+                    req.getRequestDispatcher("/UserRegistration.jsp").forward(req, resp);
+                } else {
+                    Users user = new Users(userName, password, initialWeight, height, gainWeight);
+                    user = usersDao.create(user);
+                    req.getSession().setAttribute("user", user);
+                    resp.sendRedirect("LoggedInHomePage.jsp");
+                    return;
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new IOException(e);
             }
         }
-
-        req.getRequestDispatcher("/UserRegistration.jsp").forward(req, resp);
     }
-}
+ }
+
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+//            throws ServletException, IOException {
+//        // Map for storing messages.
+//        Map<String, String> messages = new HashMap<>();
+//        req.setAttribute("messages", messages);
+//
+//        // Retrieve and validate the input parameters.
+//        String userName = req.getParameter("username");
+//        String password = req.getParameter("password");
+//        double initialWeight = Double.parseDouble(req.getParameter("initialweight")) * KG_LBS_CONVERSION;
+//        int feet = Integer.parseInt(req.getParameter("feet"));
+//        int inches = Integer.parseInt(req.getParameter("inches"));
+//        double height = (feet * 12) + inches;
+//        //double height = Double.parseDouble(req.getParameter("height"));
+//        boolean gainWeight = Boolean.parseBoolean(req.getParameter("gainweight"));
+//
+//        if (userName == null || userName.trim().isEmpty()) {
+//            messages.put("Fail", "Invalid Username");
+//        } else {
+//        	 try {
+//                 if (usersDao.usernameExists(userName)) {
+//                     messages.put("Fail", "Username already exists.");
+//                 } else {
+//                     Users user = new Users(userName, password, initialWeight, height, gainWeight);
+//                     user = usersDao.create(user);
+//                     messages.put("success", "Successfully created " + userName);
+//                     req.getSession().setAttribute("user", user);
+//                     resp.sendRedirect("LoggedInHomePage.jsp"); 
+//                 }
+//             }  catch (Exception e) {
+//                e.printStackTrace();
+//                throw new IOException(e);
+//            }
+//        }
+//        req.getRequestDispatcher("/UserRegistration.jsp").forward(req, resp);
+//    }
+//}
