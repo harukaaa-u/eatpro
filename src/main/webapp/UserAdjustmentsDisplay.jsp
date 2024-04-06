@@ -86,7 +86,7 @@
 
     <div class="button-container">
         <a href="LoggedInHomePage.jsp" class="button">Back to Home</a>
-        <a href="useradjustment" class="button">Create New Adjustment</a>
+        <a href="useradjustment" class="button">Add a new record</a>
     </div>
 </body>
 </html>
