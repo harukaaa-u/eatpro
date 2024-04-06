@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.Date;
 
 public class UserAdjustmentsDao {
@@ -254,4 +256,50 @@ public class UserAdjustmentsDao {
             }
         }
     }
+    
+    public List<UserAdjustments> getAllAdjustmentsByUserName(String userName) throws SQLException {
+        List<UserAdjustments> adjustments = new ArrayList<>();
+        String selectAdjustments =
+            "SELECT AdjustmentId, UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie " +
+            "FROM UserAdjustments WHERE UserName=? ORDER BY DateLogged DESC;";
+        
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectAdjustments);
+            selectStmt.setString(1, userName);
+            
+            results = selectStmt.executeQuery();
+            UsersDao usersDao = UsersDao.getInstance();
+
+            while (results.next()) {
+                int adjustmentId = results.getInt("AdjustmentId");
+                Date dateLogged = results.getDate("DateLogged");
+                double weight = results.getDouble("Weight");
+                boolean workoutToday = results.getBoolean("WorkoutToday");
+                int expectedExerciseCalorie = results.getInt("ExpectedExerciseCalorie");
+
+                Users user = usersDao.getUserByUserName(userName);
+                UserAdjustments adjustment = new UserAdjustments(adjustmentId, user, dateLogged, weight, workoutToday, expectedExerciseCalorie);
+                adjustments.add(adjustment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return adjustments;
+    }
+
 }
