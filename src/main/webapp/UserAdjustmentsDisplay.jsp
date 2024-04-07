@@ -70,6 +70,7 @@
             <th>Weight</th>
             <th>Workout Today</th>
             <th>Expected Exercise Calorie</th>
+            <th>Delete</th>
         </tr>
         <% for(UserAdjustments adjustment : adjustments) { %>
         <tr>
@@ -77,13 +78,21 @@
             <td><%= adjustment.getWeight() %></td>
             <td><%= adjustment.getWorkoutToday() ? "Yes" : "No" %></td>
             <td><%= adjustment.getExpectedExerciseCalorie() %></td>
+            <td>
+                <form action="deleteAdjustment" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                    <input type="hidden" name="adjustmentId" value="<%= adjustment.getAdjustmentId() %>">
+                    <button type="submit" style="border: none; background: transparent; cursor: pointer;">
+                        🗑️ 
+                    </button>
+                </form>
+            </td>
         </tr>
         <% } %>
     </table>
     <% } else { %>
-    <p>No adjustments found for <%= user.getUserName() %>.</p>
+    <p>No adjustments found for <%= user.getUserName() %>. Click the button below👇 and Add a record today!</p>
     <% } %>
-
+    
     <div class="button-container">
         <a href="LoggedInHomePage.jsp" class="button">Back to Home</a>
         <a href="useradjustment" class="button">Add a new record</a>
