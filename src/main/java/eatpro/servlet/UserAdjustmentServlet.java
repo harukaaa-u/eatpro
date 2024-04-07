@@ -33,7 +33,6 @@ public class UserAdjustmentServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException{
-    // Map for storing messages.
     Map<String, String> messages = new HashMap<String, String>();
     req.setAttribute("messages", messages);
 
@@ -49,7 +48,9 @@ public class UserAdjustmentServlet extends HttpServlet {
     req.setAttribute("messages", messages);
 
     // Retrieve and validate the necessary input data.
-    String username = req.getParameter("username");
+    // get user from session
+    Users user = (Users) req.getSession().getAttribute("user");
+    String username = user.getUserName();
     String dateLoggedStr = req.getParameter("datelogged");
     String weightStr = req.getParameter("weight");
     String workoutTodayStr = req.getParameter("workouttoday");
@@ -62,13 +63,13 @@ public class UserAdjustmentServlet extends HttpServlet {
       messages.put("success", "Invalid input.");
     } else {
       try {
-        // Fetch the user by username.
-        Users user = usersDao.getUserByUserName(username);
-        if (user == null) {
-          messages.put("failure", "User does not exist.");
-          req.getRequestDispatcher("/UserAdjustment.jsp").forward(req, resp);
-          return;
-        }
+        // Fetch the user by username. Now there is a user from session => No need to fetch username
+//        Users user = usersDao.getUserByUserName(username);
+//        if (user == null) {
+//          messages.put("failure", "User does not exist.");
+//          req.getRequestDispatcher("/UserAdjustment.jsp").forward(req, resp);
+//          return;
+//        }
 
         // Parse the dateLogged, weight, workoutToday, and expectedExerciseCalorie.
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -82,11 +83,10 @@ public class UserAdjustmentServlet extends HttpServlet {
         userAdjustment = userAdjustmentsDao.create(userAdjustment);
         messages.put("success", "Successfully created user adjustment for " + username);
         
-        // 新修改：Store the UserAdjustments object in session
-        req.getSession().setAttribute("userAdjustment", userAdjustment);
+        // Store the UserAdjustments object in session
+        req.getSession().setAttribute("user", user);
+        //req.getSession().setAttribute("userAdjustment", userAdjustment);
         req.setAttribute("username", username);
-        // 可以添加一个redirect，Redirect to DailyCalorieIntake servlet，有bug可以删掉
-//        resp.sendRedirect("dailyintakecalculation");
         
       } catch (ParseException e) {
         messages.put("success", "Invalid date format. Please use yyyy-MM-dd.");
@@ -97,7 +97,9 @@ public class UserAdjustmentServlet extends HttpServlet {
         e.printStackTrace();
       }
     }
+    resp.sendRedirect(req.getContextPath() + "/userAdjustmentsDisplay");
 
-    req.getRequestDispatcher("/UserAdjustment.jsp").forward(req, resp);
+    //req.getRequestDispatcher("/userAdjustmentsDisplay").forward(req, resp);
+   // resp.sendRedirect("/userAdjustmentsDisplay");
   }
 }

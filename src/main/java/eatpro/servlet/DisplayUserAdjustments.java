@@ -39,3 +39,4 @@ public class DisplayUserAdjustments extends HttpServlet {
         }
     }
 }
+
