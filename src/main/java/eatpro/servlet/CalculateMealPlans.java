@@ -35,10 +35,11 @@ public class CalculateMealPlans extends HttpServlet {
             throws ServletException, IOException {
         Map<String, String> messages = new HashMap<>();
         req.setAttribute("messages", messages);
-        System.out.println("Received userName attribute: " + req.getAttribute("userName"));
-        String userName = (String) req.getAttribute("userName");
-        //String userName =req.getParameter("username");
-        if (userName == null || userName.trim().isEmpty()) {
+        System.out.println("Received username attribute: " + req.getAttribute("username"));
+        Users user = (Users) req.getSession().getAttribute("user");
+        String username = user.getUserName();
+        //String username =req.getParameter("username");
+        if (username == null || username.trim().isEmpty()) {
             messages.put("title", "Invalid username.");
             RequestDispatcher dispatcher = req.getRequestDispatcher("/Test.jsp"); 
             dispatcher.forward(req, resp);
@@ -46,11 +47,6 @@ public class CalculateMealPlans extends HttpServlet {
         }
 
         try {
-            Users user = usersDao.getUserByUserName(userName);
-            if (user == null) {
-                messages.put("title", "User not found: " + userName);
-            }
-            
             MealPlans mealPlan = (MealPlans) req.getAttribute("mealPlan");
             if (mealPlan == null) {
             	messages.put("error", "No meal plan found.");
@@ -93,9 +89,10 @@ public class CalculateMealPlans extends HttpServlet {
             req.setAttribute("lunchCalories", lunchCalories);
             req.setAttribute("dinnerCalories", dinnerCalories);
             req.setAttribute("snackCalories", snackCalories);
-            req.setAttribute("userName", userName);
+            req.setAttribute("username", username);
             
-            req.getSession().setAttribute("userName", userName);
+            req.getSession().setAttribute("user", user);
+            req.getSession().setAttribute("username", username);
             req.getSession().setAttribute("totalCalories", totalDailyCalories);
             req.getSession().setAttribute("breakfastMealId", breakfastMeal.getMealId());
             req.getSession().setAttribute("lunchMealId", lunchMeal.getMealId());
@@ -106,7 +103,7 @@ public class CalculateMealPlans extends HttpServlet {
             req.getSession().setAttribute("dinnerCalories", dinnerCalories);
             req.getSession().setAttribute("snackCalories", snackCalories);
 
-            messages.put("title", "Meal Plan for " + userName);
+            messages.put("title", "Meal Plan for " + username);
            // req.getRequestDispatcher("/foodselection").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();

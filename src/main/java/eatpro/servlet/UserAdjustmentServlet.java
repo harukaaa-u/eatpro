@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/useradjustment")
 public class UserAdjustmentServlet extends HttpServlet {
-
+  public static double LBS_TO_KG = 0.453592;
   protected UserAdjustmentsDao userAdjustmentsDao;
   protected UsersDao usersDao;
 
@@ -74,7 +74,7 @@ public class UserAdjustmentServlet extends HttpServlet {
         // Parse the dateLogged, weight, workoutToday, and expectedExerciseCalorie.
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date dateLogged = new Date(dateFormat.parse(dateLoggedStr).getTime());
-        Double weight = Double.valueOf(weightStr);
+        Double weight = Double.valueOf(weightStr) * LBS_TO_KG;
         Boolean workoutToday = Boolean.valueOf(workoutTodayStr);
         Integer expectedExerciseCalorie = Integer.valueOf(expectedExerciseCalorieStr);
 

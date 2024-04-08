@@ -16,7 +16,7 @@ import java.util.Map;
 
 @WebServlet("/usergoal")
 public class UserGoalServlet extends HttpServlet {
-	private static final double KG_LBS_CONVERSION = 0.453592;
+	private static final double LBS_TO_KG = 0.453592;
     protected UserGoalsDao userGoalsDao;
     protected UsersDao usersDao;
 
@@ -54,26 +54,27 @@ public class UserGoalServlet extends HttpServlet {
         req.setAttribute("messages", messages);
 
         String action = req.getParameter("action");
-        String userName = req.getParameter("username");
+        Users user = (Users) req.getSession().getAttribute("user");
+        String userName = user.getUserName();
        // String goalTypeStr = req.getParameter("goaltype");
         UserGoals.GoalType goalType = UserGoals.GoalType.valueOf(req.getParameter("goaltype").toUpperCase());
-        double targetValue = Double.parseDouble(req.getParameter("targetvalue"))* KG_LBS_CONVERSION;
+        double targetValue = Double.parseDouble(req.getParameter("targetvalue"))* LBS_TO_KG;
         Date targetDate = Date.valueOf(req.getParameter("targetdate")); // Assuming input format is YYYY-MM-DD
 
         
         if ("create".equals(action)) {
             try {
-                Users user = usersDao.getUserByUserName(userName);
-                if (user == null) {
-                    messages.put("fail", "User not found: " + userName);
-                } else {
+//                Users user = usersDao.getUserByUserName(userName);
+//                if (user == null) {
+//                    messages.put("fail", "User not found: " + userName);
+//                } else {
                     UserGoals newGoal = new UserGoals(user, goalType, targetDate, targetValue);
                     UserGoals createdGoal = userGoalsDao.create(newGoal);                   
                     if (createdGoal != null) {
                         messages.put("success", "Successfully created a new goal for " + userName);
                     } else {
                         messages.put("fail", "Failed to create a new goal for " + userName);
-                    }
+//                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -83,7 +84,7 @@ public class UserGoalServlet extends HttpServlet {
                 messages.put("fail", "Invalid input for goal type.");
             }
         }
-
+        req.getSession().setAttribute("user", user);
         req.getRequestDispatcher("/UserGoal.jsp").forward(req, resp);
     }
         
