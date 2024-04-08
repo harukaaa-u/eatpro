@@ -83,12 +83,12 @@
     </div>
     <div class="button-container">
 	    <form action="userAdjustmentsDisplay" method="get">
-	        <button type="submit">User Adjustments</button>
+	        <button type="submit">Your Progress</button>
 	    </form>
-	    <form action="usergoals" method="get">
-	        <button type="submit">User Goals</button>
+	    <form action="userGoalsDisplay" method="get">
+	        <button type="submit">Your Goals</button>
 	    </form>
-	    <form action="mealplans" method="get">
+	    <form action="dailyintakecalculation" method="get">
 	        <button type="submit">Meal Plans</button>
 	    </form>
     </div>
