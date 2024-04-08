@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.Map" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List" %>
+<%@ page import="eatpro.model.MealPlans" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,7 +54,7 @@
         }
     </style>
 </head>
-<body>
+<%-- <body>
     <h1>Meal Plan for <%= request.getAttribute("userName") %></h1>
     <% if(request.getAttribute("messages") != null) { %>
         <% Map<String, String> messages = (Map<String, String>) request.getAttribute("messages"); %>
@@ -92,19 +95,9 @@
     <a href="foodselection" class="button">View your Meal Plans!</a>
 </body>
 </html>
+ --%>
 
 
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="java.util.List" %>
-<%@ page import="eatpro.model.MealPlans" %>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Meal Plan Details</title>
-</head>
 <body>
     <h1>Meal Plan Details</h1>
     
@@ -116,7 +109,7 @@
                 <th>Category</th>
                 <th>Ingredients</th>
                 <th>Serving Size</th>
-                <th>Meal Type</th>
+<!--                 <th>Meal Type</th> -->
             </tr>
             <c:forEach var="mealDetail" items="${entry.value}">
                 <tr>
@@ -124,7 +117,7 @@
                     <td>${mealDetail.food.foodCategory}</td>
                     <td>${mealDetail.food.ingredients}</td>
                     <td>${mealDetail.food.servingSize} ${mealDetail.food.servingUnit}</td>
-                    <td>${mealDetail.food.mealCategory}</td>
+<%--                     <td>${mealDetail.food.mealCategory}</td> --%>
                 </tr>
             </c:forEach>
         </table>
@@ -132,4 +125,3 @@
     
 </body>
 </html>
- --%>

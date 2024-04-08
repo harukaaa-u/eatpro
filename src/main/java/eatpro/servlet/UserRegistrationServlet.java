@@ -56,7 +56,7 @@ public class UserRegistrationServlet extends HttpServlet {
                     Users user = new Users(userName, password, initialWeight, height, gainWeight);
                     user = usersDao.create(user);
                     req.getSession().setAttribute("user", user);
-                    resp.sendRedirect("LoggedInHomePage.jsp");
+                    resp.sendRedirect("usergoal?action=create");
                     return;
                 }
             } catch (Exception e) {

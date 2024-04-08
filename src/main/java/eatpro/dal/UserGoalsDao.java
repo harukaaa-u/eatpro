@@ -95,7 +95,7 @@ public class UserGoalsDao {
   
   public UserGoals getGoalByUser(String userName) throws SQLException {
 	    UserGoals goal = null;
-	    String selectLatestGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC LIMIT 1;";
+	    String selectLatestGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC, GoalId DESC LIMIT 1;";
 	    
 	    try (Connection connection = connectionManager.getConnection();
 	         PreparedStatement selectStmt = connection.prepareStatement(selectLatestGoal)) {

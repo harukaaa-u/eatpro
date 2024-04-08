@@ -1,4 +1,4 @@
-// author: Haruka Uehara
+// author: Vanessa Cheang
 package eatpro.dal;
 
 import java.sql.Connection;
@@ -37,7 +37,7 @@ public class ConnectionManager {
 	// User to connect to your database instance. By default, this is "root2".
 	private final String user = "root";
 	// Password for the user.
-	private final String password = "5200SQL";
+	private final String password = "5200password";
 	// URI to your database server. If running on the same machine, then this is "local host".
 	private final String hostName = "localhost";
 	// Port to your database server. By default, this is 3307.

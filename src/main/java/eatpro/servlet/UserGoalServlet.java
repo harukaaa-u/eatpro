@@ -85,7 +85,7 @@ public class UserGoalServlet extends HttpServlet {
             }
         }
         req.getSession().setAttribute("user", user);
-        req.getRequestDispatcher("/UserGoal.jsp").forward(req, resp);
+        resp.sendRedirect("userGoalsDisplay");
     }
         
 
