@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Map" %>
+<%@ page import="eatpro.model.Users" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
         }
         table {
             border-collapse: collapse;
-            width: 80%; /* Adjust table width as necessary */
+            width: 30%; /* Adjust table width as necessary */
             margin: 20px auto; /* Center the table and add spacing at the top */
             box-shadow: 0 2px 3px rgba(0,0,0,0.1);
             border-radius: 4px;
@@ -52,13 +53,13 @@
     </style>
 </head>
 <body>
-    <h1>🍗 Meal Plan for <%= request.getAttribute("userName") %></h1>
-    <% if(request.getAttribute("messages") != null) { %>
+    <h1>🍗 Meal Plan for <%= ((Users) request.getSession().getAttribute("user")).getUserName() %></h1>
+<%--     <% if(request.getAttribute("messages") != null) { %>
         <% Map<String, String> messages = (Map<String, String>) request.getAttribute("messages"); %>
         <% for(String key : messages.keySet()) { %>
             <p style="color: <%= key.equals("failure") ? "red" : "green" %>;"><%= messages.get(key) %></p>
         <% } %>
-    <% } %>
+    <% } %> --%>
 
     <% if(request.getAttribute("totalCalories") != null) { %>
         <h2>Calories Distribution</h2>

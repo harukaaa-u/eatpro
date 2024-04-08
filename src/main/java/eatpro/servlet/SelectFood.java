@@ -74,16 +74,16 @@ public class SelectFood extends HttpServlet {
 			
 			if (meal.getMealType().equals(MealType.Snack)) {
 				Food snackFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Healthy Snack", nutrients);
-				System.out.println(snackFood == null ? "snack null" : snackFood.getFoodName());
+//				System.out.println(snackFood == null ? "snack null" : snackFood.getFoodName());
 				MealDetails mealDetailsSnack = new MealDetails(snackFood, meal);
 				mealDetails.add(mealDetailsSnack);
 			} else {
 				Food proteinFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Non-Vegan Proteins", nutrients * 0.3);
 				Food carbohydrateFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Carbohydrates", nutrients * 0.45);
 				Food vegetableFood = foodDao.getRandomFoodByMealFoodCategory(meal.getMealType(), "Vegetables", nutrients * 0.25);
-				System.out.println(proteinFood == null ? "protein null" : proteinFood.getFoodName());
-				System.out.println(carbohydrateFood == null ? "carbo null" : carbohydrateFood.getFoodName());
-				System.out.println(vegetableFood == null ? "vege null" : vegetableFood.getFoodName());
+//				System.out.println(proteinFood == null ? "protein null" : proteinFood.getFoodName());
+//				System.out.println(carbohydrateFood == null ? "carbo null" : carbohydrateFood.getFoodName());
+//				System.out.println(vegetableFood == null ? "vege null" : vegetableFood.getFoodName());
 				MealDetails mealDetails1 = new MealDetails(proteinFood, meal);
 				mealDetailsDao.create(mealDetails1);
 				MealDetails mealDetails2 = new MealDetails(carbohydrateFood, meal);
@@ -99,7 +99,7 @@ public class SelectFood extends HttpServlet {
 			e.printStackTrace();
 			throw new IOException(e);
         }
-		return mealDetails;
+		return mealDetails.isEmpty() ? null : mealDetails;
 	}
 
 //	@Override

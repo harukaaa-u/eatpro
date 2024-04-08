@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="java.util.List" %>
 <%@ page import="eatpro.model.MealPlans" %>
 
@@ -101,27 +102,38 @@
 <body>
     <h1>Meal Plan Details</h1>
     
-    <c:forEach var="entry" items="${mealDetailsMap}">
-        <h2>${entry.key}:</h2>
-        <table border="1">
-            <tr>
-                <th>Food Name</th>
-                <th>Category</th>
-                <th>Ingredients</th>
-                <th>Serving Size</th>
-<!--                 <th>Meal Type</th> -->
-            </tr>
-            <c:forEach var="mealDetail" items="${entry.value}">
-                <tr>
-                    <td>${mealDetail.food.foodName}</td>
-                    <td>${mealDetail.food.foodCategory}</td>
-                    <td>${mealDetail.food.ingredients}</td>
-                    <td>${mealDetail.food.servingSize} ${mealDetail.food.servingUnit}</td>
-<%--                     <td>${mealDetail.food.mealCategory}</td> --%>
-                </tr>
-            </c:forEach>
-        </table>
+    <c:set var="mealsOrder" value="Breakfast,Lunch,Dinner"/>
+
+    <c:forEach var="mealType" items="${mealsOrder}">
+                <h2>${mealType}</h2>
+                <c:set var="lowerMealType" value="${fn:toLowerCase(mealType)}"/>
+                <c:choose>
+                	
+                    <c:when test="${mealDetailsMap[lowerMealType] != null}">
+                        <table border="1">
+                            <tr>
+                                <th>Category</th>
+                                <th>Food Name</th>
+				                <th>Ingredients</th>
+				                <th>Serving Size</th>
+				                
+                            </tr>
+                            <c:forEach var="mealDetail" items="${mealDetailsMap[lowerMealType]}">
+                                <tr>
+                                    <td>${mealDetail.food.foodCategory}</td>
+				                    <td>${mealDetail.food.foodName}</td>
+				                    <td>${mealDetail.food.ingredients}</td>
+				                    <td>${mealDetail.food.servingSize} ${mealDetail.food.servingUnit}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </c:when>
+                    <c:otherwise>
+                        <p>There is not suggested food for this meal currently.</p>
+                    </c:otherwise>
+                </c:choose>
+
     </c:forEach>
-    
+
 </body>
 </html>
