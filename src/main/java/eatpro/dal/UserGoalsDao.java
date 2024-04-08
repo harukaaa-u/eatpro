@@ -128,7 +128,7 @@ public class UserGoalsDao {
   
   public List<UserGoals> getGoalsByUserName(String userName) throws SQLException {
     List<UserGoals> goals = new ArrayList<>();
-    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ?;";
+    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC;";
     try (Connection connection = connectionManager.getConnection();
         PreparedStatement selectStmt = connection.prepareStatement(selectGoals)) {
       selectStmt.setString(1, userName);
@@ -155,6 +155,36 @@ public class UserGoalsDao {
     }
     return goals;
   }
+  
+  public List<UserGoals> getActiveGoalsByUserName(String userName) throws SQLException {
+	    List<UserGoals> goals = new ArrayList<>();
+	    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? AND Status = 'ACTIVE' ORDER BY CreationDate DESC;";
+	    try (Connection connection = connectionManager.getConnection();
+	        PreparedStatement selectStmt = connection.prepareStatement(selectGoals)) {
+	      selectStmt.setString(1, userName);
+	      UsersDao usersDao = UsersDao.getInstance();
+
+	      try (ResultSet results = selectStmt.executeQuery()) {
+	        while (results.next()) {
+	          int goalId = results.getInt("GoalId");
+	          String goalType = results.getString("GoalType");
+	          Date targetDate = results.getDate("TargetDate");
+	          double targetValue = results.getBigDecimal("TargetValue").doubleValue();
+	          Status status = Status.valueOf(results.getString("Status"));
+	          Date creationDate = results.getDate("CreationDate");
+	          Date lastUpdated = results.getDate("LastUpdated");
+	          Users user = usersDao.getUserByUserName(userName);
+
+	          UserGoals goal = new UserGoals(goalId, user, UserGoals.GoalType.valueOf(goalType), targetDate, targetValue, status, creationDate, lastUpdated);
+	          goals.add(goal);
+	        }
+	      }
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	      throw e;
+	    }
+	    return goals;
+	  }
   
   
   public UserGoals updateGoalById(int goalId, UserGoals userGoal) throws SQLException {

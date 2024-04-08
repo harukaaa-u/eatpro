@@ -68,6 +68,7 @@ public class UserAdjustmentsDao {
 //        }
 //    }
     
+    //  checks whether the latest goal by user has been achieved while creating the user adjustment
     public UserAdjustments create(UserAdjustments userAdjustment) throws SQLException {
         String insertUserAdjustment = "INSERT INTO UserAdjustments(UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie) VALUES(?,?,?,?,?);";
         Connection connection = null;
@@ -162,7 +163,7 @@ public class UserAdjustmentsDao {
         return null;
     }
     
-    public UserAdjustments getAdjustmentByUserName(String userName) throws SQLException {
+    public UserAdjustments getLatestAdjustmentByUserName(String userName) throws SQLException {
         String selectAdjustment = 
             "SELECT AdjustmentId, UserName, DateLogged, Weight, WorkoutToday, ExpectedExerciseCalorie " +
             "FROM UserAdjustments WHERE UserName=? ORDER BY DateLogged DESC LIMIT 1;";
