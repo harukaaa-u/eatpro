@@ -56,26 +56,25 @@ public class UserGoalServlet extends HttpServlet {
         String action = req.getParameter("action");
         Users user = (Users) req.getSession().getAttribute("user");
         String userName = user.getUserName();
-       // String goalTypeStr = req.getParameter("goaltype");
         UserGoals.GoalType goalType = UserGoals.GoalType.valueOf(req.getParameter("goaltype").toUpperCase());
         double targetValue = Double.parseDouble(req.getParameter("targetvalue"))* LBS_TO_KG;
-        Date targetDate = Date.valueOf(req.getParameter("targetdate")); // Assuming input format is YYYY-MM-DD
+        Date targetDate = Date.valueOf(req.getParameter("targetdate"));
 
         
         if ("create".equals(action)) {
             try {
-//                Users user = usersDao.getUserByUserName(userName);
-//                if (user == null) {
-//                    messages.put("fail", "User not found: " + userName);
-//                } else {
+            	// change existing active goals to onhold status
+	            	List<UserGoals> activeGoals = userGoalsDao.getActiveGoalsByUserName(userName);
+	                for (UserGoals goal : activeGoals) {
+	                    userGoalsDao.updateStatus(goal.getGoalId(), UserGoals.Status.ONHOLD);
+	                }
                     UserGoals newGoal = new UserGoals(user, goalType, targetDate, targetValue);
                     UserGoals createdGoal = userGoalsDao.create(newGoal);                   
                     if (createdGoal != null) {
                         messages.put("success", "Successfully created a new goal for " + userName);
                     } else {
                         messages.put("fail", "Failed to create a new goal for " + userName);
-//                    }
-                }
+                    }
             } catch (SQLException e) {
                 e.printStackTrace();
                 messages.put("fail", "Database error occurred. Please try again.");
@@ -87,6 +86,7 @@ public class UserGoalServlet extends HttpServlet {
         req.getSession().setAttribute("user", user);
         resp.sendRedirect("userGoalsDisplay");
     }
+}
         
 
 //        Users user = null;
@@ -196,4 +196,3 @@ public class UserGoalServlet extends HttpServlet {
 //
 //        req.getRequestDispatcher("/UserGoal.jsp").forward(req, resp);
 //    }
-}
