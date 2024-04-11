@@ -14,12 +14,12 @@
             font-family: monospace;
             background-color: #f4f4f4;
             padding: 20px;
-            text-align: center; /* Center align everything in body */
+            text-align: center;
         }
         table {
             border-collapse: collapse;
-            width: 80%; /* Adjust table width as necessary */
-            margin: 20px auto; /* Center the table and add spacing at the top */
+            width: 80%;
+            margin: 20px auto; 
             box-shadow: 0 2px 3px rgba(0,0,0,0.1);
             border-radius: 4px;
             overflow: hidden;
@@ -38,9 +38,9 @@
         }
         .button-container {
             display: flex;
-            justify-content: center; /* Center the buttons horizontally */
-            gap: 20px; /* Add some space between buttons */
-            margin-top: 100px; /* Add space between table and buttons */
+            justify-content: center; 
+            gap: 20px;
+            margin-top: 100px; 
         }
         .button {
             background-color: #222222;
@@ -51,8 +51,8 @@
             cursor: pointer;
             font-size: 16px;
             padding: 10px 25px;
-            text-decoration: none; /* Remove underline from links */
-            display: inline-block; /* Allow width and padding */
+            text-decoration: none; 
+            display: inline-block;
             transition: transform 150ms, box-shadow 150ms;
         }
         .button:hover {
@@ -61,49 +61,6 @@
         }
     </style>
 </head>
-<%-- <body>
-    <h1>Meal Plan for <%= request.getAttribute("userName") %></h1>
-    <% if(request.getAttribute("messages") != null) { %>
-        <% Map<String, String> messages = (Map<String, String>) request.getAttribute("messages"); %>
-        <% for(String key : messages.keySet()) { %>
-            <p style="color: <%= key.equals("failure") ? "red" : "green" %>;"><%= messages.get(key) %></p>
-        <% } %>
-    <% } %>
-
-    <% if(request.getAttribute("totalCalories") != null) { %>
-        <h2>Calories Distribution</h2>
-        <table>
-            <tr>
-                <th>Meal</th>
-                <th>Calories</th>
-            </tr>
-            <tr>
-                <td>Breakfast</td>
-                <td><%= request.getAttribute("breakfastCalories") %></td>
-            </tr>
-            <tr>
-                <td>Lunch</td>
-                <td><%= request.getAttribute("lunchCalories") %></td>
-            </tr>
-            <tr>
-                <td>Dinner</td>
-                <td><%= request.getAttribute("dinnerCalories") %></td>
-            </tr>
-            <tr>
-                <td>Snack</td>
-                <td><%= request.getAttribute("snackCalories") %></td>
-            </tr>
-        </table>
-
-        <p>Total Daily Calorie Intake For Today: <%= request.getAttribute("totalCalories") %></p>
-    <% } %>
-    
-    <!-- Optionally, link back to the meal planning or another page -->
-    <a href="foodselection" class="button">View your Meal Plans!</a>
-</body>
-</html>
- --%>
-
 
 <body>
     <h1>Meal Plan Details</h1>

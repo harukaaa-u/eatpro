@@ -12,12 +12,12 @@
             font-family: monospace;
             background-color: #f4f4f4;
             padding: 20px;
-            text-align: center; /* Center align everything in body */
+            text-align: center; 
         }
         table {
             border-collapse: collapse;
-            width: 80%; /* Adjust table width as necessary */
-            margin: 20px auto; /* Center the table and add spacing at the top */
+            width: 80%; 
+            margin: 20px auto; 
             box-shadow: 0 2px 3px rgba(0,0,0,0.1);
             border-radius: 4px;
             overflow: hidden;
@@ -36,9 +36,9 @@
         }
         .button-container {
             display: flex;
-            justify-content: center; /* Center the buttons horizontally */
-            gap: 20px; /* Add some space between buttons */
-            margin-top: 100px; /* Add space between table and buttons */
+            justify-content: center;
+            gap: 20px;
+            margin-top: 100px; 
         }
         .button {
             background-color: #222222;
@@ -49,8 +49,8 @@
             cursor: pointer;
             font-size: 16px;
             padding: 10px 25px;
-            text-decoration: none; /* Remove underline from links */
-            display: inline-block; /* Allow width and padding */
+            text-decoration: none; 
+            display: inline-block; 
             transition: transform 150ms, box-shadow 150ms;
         }
         .button:hover {

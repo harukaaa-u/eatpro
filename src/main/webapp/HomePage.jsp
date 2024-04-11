@@ -21,10 +21,10 @@
         .intro {
             text-align: center;
             margin-top: 20px;
-            margin-bottom: 40px; /* Increased space before the buttons */
+            margin-bottom: 40px; 
             width: 55%;
             margin-left: auto;
-            margin-right: auto; /* Center the paragraph */
+            margin-right: auto;
             font-size: 15px;
         }
         .button-container {
