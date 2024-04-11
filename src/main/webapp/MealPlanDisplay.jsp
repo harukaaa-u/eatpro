@@ -36,6 +36,12 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 20px; /* Add some space between buttons */
+            margin-top: 100px; /* Add space between table and buttons */
+        }
         .button {
             background-color: #222222;
             border: none;
@@ -134,6 +140,8 @@
                 </c:choose>
 
     </c:forEach>
-
+	<div class="button-container">
+        <a href="LoggedInHomePage.jsp" class="button">Back to Home</a>
+    </div>
 </body>
 </html>

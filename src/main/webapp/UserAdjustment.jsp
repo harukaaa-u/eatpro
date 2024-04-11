@@ -78,6 +78,39 @@
             <input type="submit" value="Submit">
         </div>
     </form>
+    
+    <%--  <% String goalMessage = (String) session.getAttribute("goalMessage");
+   		session.removeAttribute("goalMessage"); // Remove the attribute after using it
+   		if (goalMessage != null) {
+	%>
+    <script>
+        alert('<%= goalMessage %>');
+        // Redirect if needed
+        <% if (goalMessage.contains("Congratulations") || goalMessage.contains("Take a break")) { %>
+            window.location.href = "<%=request.getContextPath()%>/UserGoal.jsp";
+        <% } %>
+    </script>
+<% } %> --%>
+
+		<%@ page import="java.util.Objects" %>
+		<% if (session.getAttribute("goalMessage") != null && session.getAttribute("goalActionRedirect") != null) { %>
+		<script>
+		    window.onload = function() {
+		        var message = "<%= session.getAttribute("goalMessage") %>";
+		        var redirectURL = "<%= session.getAttribute("goalActionRedirect") %>";
+		        
+		        alert(message);
+		        
+		        window.location.href = redirectURL;
+		
+		        <% 
+		        session.removeAttribute("goalMessage");
+		        session.removeAttribute("goalActionRedirect");
+		        %>
+		    }
+		</script>
+		<% } %>
+
 </body>
 </html>
 <%-- <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

@@ -75,7 +75,7 @@
         <% for(UserAdjustments adjustment : adjustments) { %>
         <tr>
             <td><%= adjustment.getDateLogged().toString() %></td>
-            <td><%= adjustment.getWeight() %></td>
+            <td><%= Math.round(adjustment.getWeight()/0.45392)%> lbs</td>
             <td><%= adjustment.getWorkoutToday() ? "Yes" : "No" %></td>
             <td><%= adjustment.getExpectedExerciseCalorie() %></td>
             <td>

@@ -14,6 +14,9 @@
             text-align: center;
             padding-top: 50px;
         }
+        h4 {
+        	text-align: center;
+        }
         form {
             background-color: #fff;
             padding: 20px;
@@ -53,7 +56,7 @@
     </style>
 </head>
 <body>
-    <h2>User Goals</h2>
+    <h2>Create a New Goal</h2>
     <form action="usergoal" method="post" style="text-align: center;">
         <input type="hidden" name="action" value="create">
         <div>Goal Type: <select name="goaltype">
@@ -64,17 +67,40 @@
         <div>Target Date (yyyy-mm-dd): <input type="date" name="targetdate" required></div>
         <div class="form-submit"><input type="submit" value="Submit Goal"></div>
     </form>
+    <h4> ** We will change your previous "Active" goals to "On Hold" Status when you submit a new goal. Keep trying! Don't give up 💪</h4>
 
     <%-- Optional: Display success or error messages --%>
-    <%
+<%--     <%
         HashMap<String, String> messages = (HashMap<String, String>) request.getAttribute("messages");
         if (messages != null) {
             for (String key : messages.keySet()) {
                 out.println("<div><h4>" + messages.get(key) + "</h4></div>");
             }
         }
-    %>
-
+    %> --%>
+    <% if (session.getAttribute("goalMessage") != null) { %>
+<script>alert('<%= session.getAttribute("goalMessage") %>');</script>
+<% session.removeAttribute("goalMessage"); %>
+<% } %>
+<%--     
+<%@ page import="java.util.Objects" %>
+		<% if (session.getAttribute("goalMessage") != null && session.getAttribute("goalActionRedirect") != null) { %>
+		<script>
+		    window.onload = function() {
+		        var message = "<%= session.getAttribute("goalMessage") %>";
+		        var redirectURL = "<%= session.getAttribute("goalActionRedirect") %>";
+		        
+		        alert(message);
+		        
+		        window.location.href = redirectURL;
+		
+		        <% 
+		        session.removeAttribute("goalMessage");
+		        session.removeAttribute("goalActionRedirect");
+		        %>
+		    }
+		</script>
+		<% } %> --%>
     <div class="back-to-home">
         <a href="LoggedInHomePage.jsp">Back to Home</a>
     </div>
