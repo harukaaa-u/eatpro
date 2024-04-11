@@ -95,7 +95,7 @@ public class UserGoalsDao {
   
   public UserGoals getGoalByUser(String userName) throws SQLException {
 	    UserGoals goal = null;
-	    String selectLatestGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC, GoalId DESC LIMIT 1;";
+	    String selectLatestGoal = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? AND Status= 'ACTIVE' ORDER BY CreationDate DESC, GoalId DESC LIMIT 1;";
 	    
 	    try (Connection connection = connectionManager.getConnection();
 	         PreparedStatement selectStmt = connection.prepareStatement(selectLatestGoal)) {
@@ -128,7 +128,8 @@ public class UserGoalsDao {
   
   public List<UserGoals> getGoalsByUserName(String userName) throws SQLException {
     List<UserGoals> goals = new ArrayList<>();
-    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC;";
+    String selectGoals = "SELECT GoalId, UserName, GoalType, TargetDate, TargetValue, Status, CreationDate, "
+    		+ "LastUpdated FROM UserGoals WHERE UserName = ? ORDER BY CreationDate DESC, GoalId DESC;";
     try (Connection connection = connectionManager.getConnection();
         PreparedStatement selectStmt = connection.prepareStatement(selectGoals)) {
       selectStmt.setString(1, userName);
@@ -217,7 +218,8 @@ public class UserGoalsDao {
 	}
   
   public UserGoals updateStatus(int userGoalId, Status newStatus) throws SQLException {
-	    String updateWeight = "UPDATE UserGoals SET Status=? LastUpdated=? WHERE GoalId=?;";
+	    String updateWeight = "UPDATE UserGoals SET Status=?, LastUpdated=? WHERE GoalId=?;";
+
 	    try (Connection connection = connectionManager.getConnection();
 	         PreparedStatement updateStmt = connection.prepareStatement(updateWeight)) {
 	      updateStmt.setString(1, newStatus.toString());
