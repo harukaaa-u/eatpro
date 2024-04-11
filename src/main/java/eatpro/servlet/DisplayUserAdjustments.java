@@ -26,7 +26,7 @@ public class DisplayUserAdjustments extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Users user = (Users) req.getSession().getAttribute("user");
         if (user == null) {
-            resp.sendRedirect("HomePage.jsp"); // Or your login page
+            resp.sendRedirect("HomePage.jsp");
             return;
         }
 

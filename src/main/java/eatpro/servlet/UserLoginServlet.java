@@ -59,6 +59,6 @@ public class UserLoginServlet extends HttpServlet {
             req.setAttribute("error", "Database error occurred. Please try again.");
         }
 
-        req.getRequestDispatcher("/loginPage.jsp").forward(req, resp);
+        req.getRequestDispatcher("/HomePage.jsp").forward(req, resp);
     }
 }
